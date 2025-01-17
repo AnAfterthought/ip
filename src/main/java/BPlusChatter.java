@@ -17,26 +17,34 @@ public class BPlusChatter {
 
         while (true) {
             userInput = userInputScanner.nextLine();
+            System.out.println("\t" + separator);
             if (userInput.equals("bye")) {
-                System.out.println("\t" + separator);
                 System.out.println("\t" + exit);
                 System.out.println("\t" + separator);
                 break;
             }
             if (userInput.equals("list")) {
-                System.out.println("\t" + separator);
                 for (int i = 0; i < index; i++) {
-                    System.out.println("\t"+ (i + 1) + ".[" + tasks[i].getStatusIcon() + "] " + tasks[i]);
+                    System.out.println("\t"+ (i + 1) + "." + tasks[i].getStatus());
                 }
-                System.out.println("\t" + separator);
-            } else {
+            } else if (userInput.matches("mark \\d")) {
+                int taskIndex = Integer.parseInt(userInput.split(" ")[1]) - 1;
+                tasks[taskIndex].setIsDone(true);
+                System.out.println("\tWell done! This task is done:");
+                System.out.println("\t\t" + tasks[taskIndex].getStatus());
+            } else if (userInput.matches("unmark \\d")) {
+                int taskIndex = Integer.parseInt(userInput.split(" ")[1]) - 1;
+                tasks[taskIndex].setIsDone(false);
+                System.out.println("\tOk, this task is not done yet:");
+                System.out.println("\t\t" + tasks[taskIndex].getStatus());
+            }
+            else {
                 Task task = new Task(userInput);
                 tasks[index] = task;
                 index += 1;
-                System.out.println("\t" + separator);
                 System.out.println("\tadded: " + task);
-                System.out.println("\t" + separator);
             }
+            System.out.println("\t" + separator);
         }
     }
 }
