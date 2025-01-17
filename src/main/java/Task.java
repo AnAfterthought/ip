@@ -15,11 +15,7 @@ public class Task {
         this.isDone = isDone;
     }
 
-    public String getStatus() {
-        return "[" + getStatusIcon() + "] " + this.description;
-    }
-
     public String toString() {
-        return this.description;
+        return "[" + getStatusIcon() + "] " + this.description;
     }
 }

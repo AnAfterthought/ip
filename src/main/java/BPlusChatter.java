@@ -4,7 +4,7 @@ public class BPlusChatter {
 
     public static void list(Task[] tasks, int count) {
         for (int i = 0; i < count; i++) {
-            System.out.println("\t"+ (i + 1) + "." + tasks[i].getStatus());
+            System.out.println("\t"+ (i + 1) + "." + tasks[i]);
         }
     }
 
@@ -16,7 +16,7 @@ public class BPlusChatter {
         } else {
             System.out.println("\tOk, this task is not done yet:");
         }
-        System.out.println("\t\t" + tasks[taskIndex].getStatus());
+        System.out.println("\t\t" + tasks[taskIndex]);
     }
 
     public static void addTask(Task task, Task[] tasks, int index) {
@@ -56,6 +56,11 @@ public class BPlusChatter {
             } else if (userInput.startsWith("todo ")) {
                 String task = userInput.split(" ",2)[1];
                 addTask(new ToDo(task), tasks, index);
+                index += 1;
+            } else if (userInput.startsWith("deadline ") && userInput.contains(" /by ")) {
+                String task = userInput.split(" ",2)[1];
+                String[] taskParts = task.split(" /by ");
+                addTask(new Deadline(taskParts[0], taskParts[1]), tasks, index);
                 index += 1;
             }
             else {
