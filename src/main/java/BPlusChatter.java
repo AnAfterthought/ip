@@ -62,12 +62,16 @@ public class BPlusChatter {
                 String[] taskParts = task.split(" /by ");
                 addTask(new Deadline(taskParts[0], taskParts[1]), tasks, index);
                 index += 1;
+            } else if (userInput.startsWith("event ") && userInput.contains(" /from") && userInput.contains(" /to ")) {
+                String task = userInput.split(" ",2)[1];
+                String[] taskParts = task.split(" /from ");
+                String[] duration = taskParts[1].split(" /to ");
+                addTask(new Event(taskParts[0], duration[0], duration[1]), tasks, index);
+                index += 1;
             }
             else {
-                Task task = new Task(userInput);
-                tasks[index] = task;
+                addTask(new Task(userInput), tasks, index);
                 index += 1;
-                System.out.println("\tadded: " + task);
             }
             System.out.println("\t" + separator);
         }
