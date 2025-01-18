@@ -30,7 +30,7 @@ public class BPlusChatter {
 
     public static int handleCommands(String userInput, Task[] tasks, int index)
             throws UnknownCommandException, InvalidToDoException, InvalidDeadlineException, InvalidEventException,
-            InvalidMarkException {
+            InvalidMarkException, InvalidUnmarkException {
         String separator = "____________________________________________________________";
         System.out.println("\t" + separator);
         /*if (userInput.equals("bye")) {
@@ -52,8 +52,12 @@ public class BPlusChatter {
             } catch (Exception e) {
                 throw new InvalidMarkException();
             }
-        } else if (userInput.matches("unmark \\d")) {
-            //setIsDone(userInput, false, tasks);
+        } else if (command.equals("unmark")) {
+            try {
+                setIsDone(userInput, false, tasks);
+            } catch (Exception e) {
+                throw new InvalidUnmarkException();
+            }
         } else if (command.equals("todo")) {
             if (details.isEmpty()) {
                 throw new InvalidToDoException();
@@ -118,6 +122,10 @@ public class BPlusChatter {
                 System.out.println("\t" + separator);
             } catch (InvalidMarkException e) {
                 System.out.println("\tWRONG FORMAT :(\n " + "\tFormat: mark <task number>");
+                System.out.println("\tYou have " + index + " task(s)");
+                System.out.println("\t" + separator);
+            } catch (InvalidUnmarkException e) {
+                System.out.println("\tWRONG FORMAT :(\n " + "\tFormat: unmark <task number>");
                 System.out.println("\tYou have " + index + " task(s)");
                 System.out.println("\t" + separator);
             }
