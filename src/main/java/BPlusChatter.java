@@ -26,7 +26,8 @@ public class BPlusChatter {
         System.out.println("\tYou now have " + (index + 1) + " tasks");
     }
 
-    public static void handleCommands(String userInput, Task[] tasks, int index) throws UnknownCommandException {
+    public static int handleCommands(String userInput, Task[] tasks, int index)
+            throws UnknownCommandException, InvalidToDoException {
         String separator = "____________________________________________________________";
         System.out.println("\t" + separator);
         /*if (userInput.equals("bye")) {
@@ -34,29 +35,39 @@ public class BPlusChatter {
             System.out.println("\t" + separator);
             break;
         }*/
-        if (userInput.equals("list")) {
+        String taskParts[] = userInput.split(" ", 2);
+        String command = taskParts[0];
+        String details = "";
+        if (taskParts.length == 2) {
+            details = taskParts[1];
+        }
+        if (command.equals("list")) {
             list(tasks, index);
         } else if (userInput.matches("mark \\d")) {
             setIsDone(userInput, true, tasks);
         } else if (userInput.matches("unmark \\d")) {
             setIsDone(userInput, false, tasks);
-        } else if (userInput.startsWith("todo ")) {
-            String task = userInput.split(" ",2)[1];
-            addTask(new ToDo(task), tasks, index);
+        } else if (command.equals("todo")) {
+            if (details.isEmpty()) {
+                throw new InvalidToDoException();
+            }
+            addTask(new ToDo(taskParts[1]), tasks, index);
+            index += 1;
         } else if (userInput.startsWith("deadline ") && userInput.contains(" /by ")) {
-            String task = userInput.split(" ",2)[1];
-            String[] taskParts = task.split(" /by ");
-            addTask(new Deadline(taskParts[0], taskParts[1]), tasks, index);
+            //String task = userInput.split(" ",2)[1];
+            //String[] taskParts = task.split(" /by ");
+            //addTask(new Deadline(taskParts[0], taskParts[1]), tasks, index);
         } else if (userInput.startsWith("event ") && userInput.contains(" /from") && userInput.contains(" /to ")) {
-            String task = userInput.split(" ",2)[1];
-            String[] taskParts = task.split(" /from ");
-            String[] duration = taskParts[1].split(" /to ");
-            addTask(new Event(taskParts[0], duration[0], duration[1]), tasks, index);
+            //String task = userInput.split(" ",2)[1];
+            //String[] taskParts = task.split(" /from ");
+            //String[] duration = taskParts[1].split(" /to ");
+            //addTask(new Event(taskParts[0], duration[0], duration[1]), tasks, index);
         }
         else {
             throw new UnknownCommandException();
         }
         System.out.println("\t" + separator);
+        return index;
     }
 
     public static void main(String[] args) {
@@ -75,11 +86,14 @@ public class BPlusChatter {
         while (true) {
             try {
                 userInput = userInputScanner.nextLine();
-                handleCommands(userInput, tasks, index);
-                index += 1;
+                index = handleCommands(userInput, tasks, index);
             } catch (UnknownCommandException e) {
-                System.out.println("\tI do not know this command :(\n " +
+                System.out.println("\tUNKNOWN COMMAND :(\n " +
                         "\tTry starting with todo, deadline, event, mark, unmark, list or bye");
+                System.out.println("\t" + separator);
+            } catch (InvalidToDoException e) {
+                System.out.println("\tWRONG FORMAT :(\n " +
+                        "\tFormat: todo <task>");
                 System.out.println("\t" + separator);
             }
         }
