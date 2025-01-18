@@ -33,11 +33,11 @@ public class BPlusChatter {
             InvalidMarkException, InvalidUnmarkException {
         String separator = "____________________________________________________________";
         System.out.println("\t" + separator);
-        /*if (userInput.equals("bye")) {
-            System.out.println("\t" + exit);
-            System.out.println("\t" + separator);
-            break;
-        }*/
+
+        if (userInput.equals("bye")) {
+            return -1;
+        }
+
         String taskParts[] = userInput.split(" ", 2);
         String command = taskParts[0];
         String details = "";
@@ -107,6 +107,11 @@ public class BPlusChatter {
             try {
                 userInput = userInputScanner.nextLine();
                 index = handleCommands(userInput, tasks, index);
+                if (index == -1) {
+                    System.out.println("\t" + exit);
+                    System.out.println("\t" + separator);
+                    break;
+                }
             } catch (UnknownCommandException e) {
                 System.out.println("\tUNKNOWN COMMAND :(\n " +
                         "\tTry starting with todo, deadline, event, mark, unmark, list or bye");
