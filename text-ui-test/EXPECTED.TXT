@@ -3,37 +3,43 @@
 	What can I do for you?
 	____________________________________________________________
 	____________________________________________________________
-	OK. I've added this task:
-		[ ] read book
-	You now have 1 tasks
+	UNKNOWN COMMAND :(
+ 	Try starting with todo, deadline, event, mark, unmark, list or bye
 	____________________________________________________________
 	____________________________________________________________
 	OK. I've added this task:
 		[D][ ] return book (by: Monday)
-	You now have 2 tasks
+	You now have 1 tasks
 	____________________________________________________________
 	____________________________________________________________
 	OK. I've added this task:
 		[E][ ] meeting (from: Friday 2pm to: 4pm)
-	You now have 3 tasks
+	You now have 2 tasks
+	____________________________________________________________
+	____________________________________________________________
+	WRONG FORMAT :(
+ 	Format: mark <task number>
+	You have 2 task(s)
+	____________________________________________________________
+	____________________________________________________________
+	WRONG FORMAT :(
+ 	Format: deadline <task> /by <date>
 	____________________________________________________________
 	____________________________________________________________
 	Well done! This task is done:
 		[D][X] return book (by: Monday)
 	____________________________________________________________
 	____________________________________________________________
-	1.[ ] read book
-	2.[D][X] return book (by: Monday)
-	3.[E][ ] meeting (from: Friday 2pm to: 4pm)
+	1.[D][X] return book (by: Monday)
+	2.[E][ ] meeting (from: Friday 2pm to: 4pm)
 	____________________________________________________________
 	____________________________________________________________
 	Ok, this task is not done yet:
 		[D][ ] return book (by: Monday)
 	____________________________________________________________
 	____________________________________________________________
-	1.[ ] read book
-	2.[D][ ] return book (by: Monday)
-	3.[E][ ] meeting (from: Friday 2pm to: 4pm)
+	1.[D][ ] return book (by: Monday)
+	2.[E][ ] meeting (from: Friday 2pm to: 4pm)
 	____________________________________________________________
 	____________________________________________________________
 	Bye bye. Come back soon!

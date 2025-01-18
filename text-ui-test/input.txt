@@ -1,8 +1,10 @@
 read book
 deadline return book /by Monday
 event meeting /from Friday 2pm /to 4pm
-mark 2
+mark 3
+deadline make dinner by 4pm
+mark 1
 list
-unmark 2
+unmark 1
 list
 bye
