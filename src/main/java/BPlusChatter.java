@@ -12,17 +12,17 @@ public class BPlusChatter {
         }
     }
 
-    /*public static void setIsDone(String userInput, boolean isDone, Task[] tasks) throws
+    public static void setIsDone(String userInput, boolean isDone) throws
             NumberFormatException, IndexOutOfBoundsException {
         int taskIndex = Integer.parseInt(userInput.split(" ")[1]) - 1;
-        tasks[taskIndex].setIsDone(isDone);
+        tasks.get(taskIndex).setIsDone(isDone);
         if (isDone) {
             System.out.println("\tWell done! This task is done:");
         } else {
             System.out.println("\tOk, this task is not done yet:");
         }
-        System.out.println("\t\t" + tasks[taskIndex]);
-    }*/
+        System.out.println("\t\t" + tasks.get(taskIndex));
+    }
 
     public static void addTask(Task task) {
         tasks.add(task);
@@ -47,13 +47,13 @@ public class BPlusChatter {
             list();
         } else if (command.equals("mark")) {
             try {
-                //setIsDone(userInput, true, tasks);
+                setIsDone(userInput, true);
             } catch (Exception e) {
                 throw new InvalidMarkException();
             }
         } else if (command.equals("unmark")) {
             try {
-                //setIsDone(userInput, false, tasks);
+                setIsDone(userInput, false);
             } catch (Exception e) {
                 throw new InvalidUnmarkException();
             }
