@@ -3,8 +3,8 @@ import java.util.Scanner;
 import java.util.ArrayList;
 
 public class BPlusChatter {
-    static ArrayList<Task> tasks = new ArrayList<Task>();
-    static int index = 0;
+    static ArrayList<Task> tasks = new ArrayList<>();
+    static int count = 0;
 
     public static void list() {
         for (int i = 0; i < tasks.size(); i++) {
@@ -26,9 +26,19 @@ public class BPlusChatter {
 
     public static void addTask(Task task) {
         tasks.add(task);
+        count += 1;
         System.out.println("\tOK. I've added this task:");
         System.out.println("\t\t" + task);
-        System.out.println("\tYou now have " + (index + 1) + " tasks");
+        System.out.println("\tYou now have " + count + " tasks");
+    }
+
+    public static void deleteTask(String details) throws NumberFormatException, IndexOutOfBoundsException {
+        int taskIndex = Integer.parseInt(details) - 1;
+        count -= 1;
+        System.out.println("\tOk. I've deleted this task:");
+        System.out.println("\t\t" + tasks.get(taskIndex));
+        System.out.println("\tYou now have " + count + " tasks");
+        tasks.remove(taskIndex);
     }
 
     public static void handleCommands(String userInput)
@@ -62,14 +72,12 @@ public class BPlusChatter {
                 throw new InvalidToDoException();
             }
             addTask(new ToDo(taskParts[1]));
-            index += 1;
         } else if (command.equals("deadline")) {
             String[] detailParts = details.split(" /by ",2);
             if (detailParts.length != 2) {
                 throw new InvalidDeadlineException();
             }
             addTask(new Deadline(detailParts[0], detailParts[1]));
-            index += 1;
         } else if (command.equals("event")) {
             String[] detailParts = details.split(" /from ", 2);
             if (detailParts.length != 2) {
@@ -80,10 +88,10 @@ public class BPlusChatter {
                 throw new InvalidEventException();
             }
             addTask(new Event(detailParts[0], duration[0], duration[1]));
-            index += 1;
-        }
-        else if (userInput.equals("bye")) {
-            index = -1;
+        } else if (command.equals("delete")){
+            deleteTask(details);
+        } else if (userInput.equals("bye")) {
+            count = -1;
             return;
         } else {
             throw new UnknownCommandException();
@@ -105,7 +113,7 @@ public class BPlusChatter {
             try {
                 String userInput = userInputScanner.nextLine();
                 handleCommands(userInput);
-                if (index == -1) {
+                if (count == -1) {
                     System.out.println("\t" + exit);
                     System.out.println("\t" + separator);
                     break;
@@ -125,11 +133,11 @@ public class BPlusChatter {
                 System.out.println("\t" + separator);
             } catch (InvalidMarkException e) {
                 System.out.println("\tWRONG FORMAT :(\n " + "\tFormat: mark <task number>");
-                System.out.println("\tYou have " + index + " task(s)");
+                System.out.println("\tYou have " + count + " task(s)");
                 System.out.println("\t" + separator);
             } catch (InvalidUnmarkException e) {
                 System.out.println("\tWRONG FORMAT :(\n " + "\tFormat: unmark <task number>");
-                System.out.println("\tYou have " + index + " task(s)");
+                System.out.println("\tYou have " + count + " task(s)");
                 System.out.println("\t" + separator);
             }
         }
