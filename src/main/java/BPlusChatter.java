@@ -124,30 +124,19 @@ public class BPlusChatter {
                     break;
                 }
             } catch (UnknownCommandException e) {
-                System.out.println("\tUNKNOWN COMMAND :(\n " +
-                        "\tTry starting with todo, deadline, event, mark, unmark, list or bye");
-                System.out.println("\t" + separator);
+                System.out.println(e.toString(separator));
             } catch (InvalidToDoException e) {
-                System.out.println("\tWRONG FORMAT :(\n " + "\tFormat: todo <task>");
-                System.out.println("\t" + separator);
+                System.out.println(e.toString(separator));
             } catch (InvalidDeadlineException e) {
-                System.out.println("\tWRONG FORMAT :(\n " + "\tFormat: deadline <task> /by <date>");
-                System.out.println("\t" + separator);
+                System.out.println(e.toString(separator));
             } catch (InvalidEventException e) {
-                System.out.println("\tWRONG FORMAT :(\n " + "\tFormat: event <task> /from <date> /to <date>");
-                System.out.println("\t" + separator);
+                System.out.println(e.toString(separator));
             } catch (InvalidMarkException e) {
-                System.out.println("\tWRONG FORMAT :(\n " + "\tFormat: mark <task number>");
-                System.out.println("\tYou have " + count + " task(s)");
-                System.out.println("\t" + separator);
+                System.out.println(e.toString(count, separator));
             } catch (InvalidUnmarkException e) {
-                System.out.println("\tWRONG FORMAT :(\n " + "\tFormat: unmark <task number>");
-                System.out.println("\tYou have " + count + " task(s)");
-                System.out.println("\t" + separator);
+                System.out.println(e.toString(count, separator));
             } catch (InvalidDeleteException e) {
-                System.out.println("\tWRONG FORMAT :(\n " + "\tFormat: delete <task number>");
-                System.out.println("\tYou have " + count + " task(s)");
-                System.out.println("\t" + separator);
+                System.out.println(e.toString(count, separator));
             }
         }
     }
