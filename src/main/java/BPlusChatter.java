@@ -1,3 +1,4 @@
+import java.awt.dnd.InvalidDnDOperationException;
 import java.util.Scanner;
 
 public class BPlusChatter {
@@ -27,7 +28,7 @@ public class BPlusChatter {
     }
 
     public static int handleCommands(String userInput, Task[] tasks, int index)
-            throws UnknownCommandException, InvalidToDoException {
+            throws UnknownCommandException, InvalidToDoException, InvalidDeadlineException {
         String separator = "____________________________________________________________";
         System.out.println("\t" + separator);
         /*if (userInput.equals("bye")) {
@@ -53,10 +54,13 @@ public class BPlusChatter {
             }
             addTask(new ToDo(taskParts[1]), tasks, index);
             index += 1;
-        } else if (userInput.startsWith("deadline ") && userInput.contains(" /by ")) {
-            //String task = userInput.split(" ",2)[1];
-            //String[] taskParts = task.split(" /by ");
-            //addTask(new Deadline(taskParts[0], taskParts[1]), tasks, index);
+        } else if (command.equals("deadline")) {
+            String[] detailParts = details.split(" /by ",2);
+            if (detailParts.length != 2) {
+                throw new InvalidDeadlineException();
+            }
+            addTask(new Deadline(detailParts[0], detailParts[1]), tasks, index);
+            index += 1;
         } else if (userInput.startsWith("event ") && userInput.contains(" /from") && userInput.contains(" /to ")) {
             //String task = userInput.split(" ",2)[1];
             //String[] taskParts = task.split(" /from ");
@@ -92,8 +96,10 @@ public class BPlusChatter {
                         "\tTry starting with todo, deadline, event, mark, unmark, list or bye");
                 System.out.println("\t" + separator);
             } catch (InvalidToDoException e) {
-                System.out.println("\tWRONG FORMAT :(\n " +
-                        "\tFormat: todo <task>");
+                System.out.println("\tWRONG FORMAT :(\n " + "\tFormat: todo <task>");
+                System.out.println("\t" + separator);
+            } catch (InvalidDeadlineException e) {
+                System.out.println("\tWRONG FORMAT :(\n " + "\tFormat: deadline <task> /by <date>");
                 System.out.println("\t" + separator);
             }
         }
