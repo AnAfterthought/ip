@@ -9,7 +9,8 @@ public class BPlusChatter {
         }
     }
 
-    public static void setIsDone(String userInput, boolean isDone, Task[] tasks) {
+    public static void setIsDone(String userInput, boolean isDone, Task[] tasks) throws
+            NumberFormatException, IndexOutOfBoundsException {
         int taskIndex = Integer.parseInt(userInput.split(" ")[1]) - 1;
         tasks[taskIndex].setIsDone(isDone);
         if (isDone) {
@@ -28,7 +29,8 @@ public class BPlusChatter {
     }
 
     public static int handleCommands(String userInput, Task[] tasks, int index)
-            throws UnknownCommandException, InvalidToDoException, InvalidDeadlineException, InvalidEventException {
+            throws UnknownCommandException, InvalidToDoException, InvalidDeadlineException, InvalidEventException,
+            InvalidMarkException {
         String separator = "____________________________________________________________";
         System.out.println("\t" + separator);
         /*if (userInput.equals("bye")) {
@@ -44,10 +46,14 @@ public class BPlusChatter {
         }
         if (command.equals("list")) {
             list(tasks, index);
-        } else if (userInput.matches("mark \\d")) {
-            setIsDone(userInput, true, tasks);
+        } else if (command.equals("mark")) {
+            try {
+                setIsDone(userInput, true, tasks);
+            } catch (Exception e) {
+                throw new InvalidMarkException();
+            }
         } else if (userInput.matches("unmark \\d")) {
-            setIsDone(userInput, false, tasks);
+            //setIsDone(userInput, false, tasks);
         } else if (command.equals("todo")) {
             if (details.isEmpty()) {
                 throw new InvalidToDoException();
@@ -109,6 +115,10 @@ public class BPlusChatter {
                 System.out.println("\t" + separator);
             } catch (InvalidEventException e) {
                 System.out.println("\tWRONG FORMAT :(\n " + "\tFormat: event <task> /from <date> /to <date>");
+                System.out.println("\t" + separator);
+            } catch (InvalidMarkException e) {
+                System.out.println("\tWRONG FORMAT :(\n " + "\tFormat: mark <task number>");
+                System.out.println("\tYou have " + index + " task(s)");
                 System.out.println("\t" + separator);
             }
         }
