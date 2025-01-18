@@ -1,15 +1,18 @@
-import java.awt.dnd.InvalidDnDOperationException;
+import java.lang.reflect.Array;
 import java.util.Scanner;
+import java.util.ArrayList;
 
 public class BPlusChatter {
+    static ArrayList<Task> tasks = new ArrayList<Task>();
+    static int index = 0;
 
-    public static void list(Task[] tasks, int count) {
-        for (int i = 0; i < count; i++) {
-            System.out.println("\t"+ (i + 1) + "." + tasks[i]);
+    public static void list() {
+        for (int i = 0; i < tasks.size(); i++) {
+            System.out.println("\t"+ (i + 1) + "." + tasks.get(i));
         }
     }
 
-    public static void setIsDone(String userInput, boolean isDone, Task[] tasks) throws
+    /*public static void setIsDone(String userInput, boolean isDone, Task[] tasks) throws
             NumberFormatException, IndexOutOfBoundsException {
         int taskIndex = Integer.parseInt(userInput.split(" ")[1]) - 1;
         tasks[taskIndex].setIsDone(isDone);
@@ -19,24 +22,20 @@ public class BPlusChatter {
             System.out.println("\tOk, this task is not done yet:");
         }
         System.out.println("\t\t" + tasks[taskIndex]);
-    }
+    }*/
 
-    public static void addTask(Task task, Task[] tasks, int index) {
-        tasks[index] = task;
+    public static void addTask(Task task) {
+        tasks.add(task);
         System.out.println("\tOK. I've added this task:");
         System.out.println("\t\t" + task);
         System.out.println("\tYou now have " + (index + 1) + " tasks");
     }
 
-    public static int handleCommands(String userInput, Task[] tasks, int index)
+    public static void handleCommands(String userInput)
             throws UnknownCommandException, InvalidToDoException, InvalidDeadlineException, InvalidEventException,
             InvalidMarkException, InvalidUnmarkException {
         String separator = "____________________________________________________________";
         System.out.println("\t" + separator);
-
-        if (userInput.equals("bye")) {
-            return -1;
-        }
 
         String taskParts[] = userInput.split(" ", 2);
         String command = taskParts[0];
@@ -45,16 +44,16 @@ public class BPlusChatter {
             details = taskParts[1];
         }
         if (command.equals("list")) {
-            list(tasks, index);
+            list();
         } else if (command.equals("mark")) {
             try {
-                setIsDone(userInput, true, tasks);
+                //setIsDone(userInput, true, tasks);
             } catch (Exception e) {
                 throw new InvalidMarkException();
             }
         } else if (command.equals("unmark")) {
             try {
-                setIsDone(userInput, false, tasks);
+                //setIsDone(userInput, false, tasks);
             } catch (Exception e) {
                 throw new InvalidUnmarkException();
             }
@@ -62,14 +61,14 @@ public class BPlusChatter {
             if (details.isEmpty()) {
                 throw new InvalidToDoException();
             }
-            addTask(new ToDo(taskParts[1]), tasks, index);
+            addTask(new ToDo(taskParts[1]));
             index += 1;
         } else if (command.equals("deadline")) {
             String[] detailParts = details.split(" /by ",2);
             if (detailParts.length != 2) {
                 throw new InvalidDeadlineException();
             }
-            addTask(new Deadline(detailParts[0], detailParts[1]), tasks, index);
+            addTask(new Deadline(detailParts[0], detailParts[1]));
             index += 1;
         } else if (command.equals("event")) {
             String[] detailParts = details.split(" /from ", 2);
@@ -80,22 +79,21 @@ public class BPlusChatter {
             if (duration.length != 2) {
                 throw new InvalidEventException();
             }
-            addTask(new Event(detailParts[0], duration[0], duration[1]), tasks, index);
+            addTask(new Event(detailParts[0], duration[0], duration[1]));
             index += 1;
         }
-        else {
+        else if (userInput.equals("bye")) {
+            index = -1;
+            return;
+        } else {
             throw new UnknownCommandException();
         }
         System.out.println("\t" + separator);
-        return index;
     }
 
     public static void main(String[] args) {
-        Task[] tasks = new Task[100];
-        int index = 0;
 
         Scanner userInputScanner = new Scanner(System.in);
-        String userInput;
         String greeting = "Hello! I'm BPlusChatter :)\n\tWhat can I do for you?";
         String exit = "Bye bye. Come back soon!";
         String separator = "____________________________________________________________";
@@ -105,8 +103,8 @@ public class BPlusChatter {
 
         while (true) {
             try {
-                userInput = userInputScanner.nextLine();
-                index = handleCommands(userInput, tasks, index);
+                String userInput = userInputScanner.nextLine();
+                handleCommands(userInput);
                 if (index == -1) {
                     System.out.println("\t" + exit);
                     System.out.println("\t" + separator);
