@@ -26,6 +26,39 @@ public class BPlusChatter {
         System.out.println("\tYou now have " + (index + 1) + " tasks");
     }
 
+    public static void handleCommands(String userInput, Task[] tasks, int index) throws UnknownCommandException {
+        String separator = "____________________________________________________________";
+        System.out.println("\t" + separator);
+        /*if (userInput.equals("bye")) {
+            System.out.println("\t" + exit);
+            System.out.println("\t" + separator);
+            break;
+        }*/
+        if (userInput.equals("list")) {
+            list(tasks, index);
+        } else if (userInput.matches("mark \\d")) {
+            setIsDone(userInput, true, tasks);
+        } else if (userInput.matches("unmark \\d")) {
+            setIsDone(userInput, false, tasks);
+        } else if (userInput.startsWith("todo ")) {
+            String task = userInput.split(" ",2)[1];
+            addTask(new ToDo(task), tasks, index);
+        } else if (userInput.startsWith("deadline ") && userInput.contains(" /by ")) {
+            String task = userInput.split(" ",2)[1];
+            String[] taskParts = task.split(" /by ");
+            addTask(new Deadline(taskParts[0], taskParts[1]), tasks, index);
+        } else if (userInput.startsWith("event ") && userInput.contains(" /from") && userInput.contains(" /to ")) {
+            String task = userInput.split(" ",2)[1];
+            String[] taskParts = task.split(" /from ");
+            String[] duration = taskParts[1].split(" /to ");
+            addTask(new Event(taskParts[0], duration[0], duration[1]), tasks, index);
+        }
+        else {
+            throw new UnknownCommandException();
+        }
+        System.out.println("\t" + separator);
+    }
+
     public static void main(String[] args) {
         Task[] tasks = new Task[100];
         int index = 0;
@@ -40,40 +73,15 @@ public class BPlusChatter {
         System.out.println("\t" + separator);
 
         while (true) {
-            userInput = userInputScanner.nextLine();
-            System.out.println("\t" + separator);
-            if (userInput.equals("bye")) {
-                System.out.println("\t" + exit);
+            try {
+                userInput = userInputScanner.nextLine();
+                handleCommands(userInput, tasks, index);
+                index += 1;
+            } catch (UnknownCommandException e) {
+                System.out.println("\tI do not know this command :(\n " +
+                        "\tTry starting with todo, deadline, event, mark, unmark, list or bye");
                 System.out.println("\t" + separator);
-                break;
             }
-            if (userInput.equals("list")) {
-                list(tasks, index);
-            } else if (userInput.matches("mark \\d")) {
-                setIsDone(userInput, true, tasks);
-            } else if (userInput.matches("unmark \\d")) {
-                setIsDone(userInput, false, tasks);
-            } else if (userInput.startsWith("todo ")) {
-                String task = userInput.split(" ",2)[1];
-                addTask(new ToDo(task), tasks, index);
-                index += 1;
-            } else if (userInput.startsWith("deadline ") && userInput.contains(" /by ")) {
-                String task = userInput.split(" ",2)[1];
-                String[] taskParts = task.split(" /by ");
-                addTask(new Deadline(taskParts[0], taskParts[1]), tasks, index);
-                index += 1;
-            } else if (userInput.startsWith("event ") && userInput.contains(" /from") && userInput.contains(" /to ")) {
-                String task = userInput.split(" ",2)[1];
-                String[] taskParts = task.split(" /from ");
-                String[] duration = taskParts[1].split(" /to ");
-                addTask(new Event(taskParts[0], duration[0], duration[1]), tasks, index);
-                index += 1;
-            }
-            else {
-                addTask(new Task(userInput), tasks, index);
-                index += 1;
-            }
-            System.out.println("\t" + separator);
         }
     }
 }
