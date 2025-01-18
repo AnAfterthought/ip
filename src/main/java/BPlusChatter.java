@@ -29,21 +29,22 @@ public class BPlusChatter {
         count += 1;
         System.out.println("\tOK. I've added this task:");
         System.out.println("\t\t" + task);
-        System.out.println("\tYou now have " + count + " tasks");
+        System.out.println("\tYou now have " + count + " task(s)");
     }
 
     public static void deleteTask(String details) throws NumberFormatException, IndexOutOfBoundsException {
         int taskIndex = Integer.parseInt(details) - 1;
+        Task task = tasks.get(taskIndex);
         count -= 1;
         System.out.println("\tOk. I've deleted this task:");
-        System.out.println("\t\t" + tasks.get(taskIndex));
-        System.out.println("\tYou now have " + count + " tasks");
+        System.out.println("\t\t" + task);
+        System.out.println("\tYou now have " + count + " task(s)");
         tasks.remove(taskIndex);
     }
 
     public static void handleCommands(String userInput)
             throws UnknownCommandException, InvalidToDoException, InvalidDeadlineException, InvalidEventException,
-            InvalidMarkException, InvalidUnmarkException {
+            InvalidMarkException, InvalidUnmarkException, InvalidDeleteException {
         String separator = "____________________________________________________________";
         System.out.println("\t" + separator);
 
@@ -89,7 +90,11 @@ public class BPlusChatter {
             }
             addTask(new Event(detailParts[0], duration[0], duration[1]));
         } else if (command.equals("delete")){
-            deleteTask(details);
+            try {
+                deleteTask(details);
+            } catch (Exception e) {
+                throw new InvalidDeleteException();
+            }
         } else if (userInput.equals("bye")) {
             count = -1;
             return;
@@ -137,6 +142,10 @@ public class BPlusChatter {
                 System.out.println("\t" + separator);
             } catch (InvalidUnmarkException e) {
                 System.out.println("\tWRONG FORMAT :(\n " + "\tFormat: unmark <task number>");
+                System.out.println("\tYou have " + count + " task(s)");
+                System.out.println("\t" + separator);
+            } catch (InvalidDeleteException e) {
+                System.out.println("\tWRONG FORMAT :(\n " + "\tFormat: delete <task number>");
                 System.out.println("\tYou have " + count + " task(s)");
                 System.out.println("\t" + separator);
             }
