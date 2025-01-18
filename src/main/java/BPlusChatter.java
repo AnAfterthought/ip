@@ -28,7 +28,7 @@ public class BPlusChatter {
     }
 
     public static int handleCommands(String userInput, Task[] tasks, int index)
-            throws UnknownCommandException, InvalidToDoException, InvalidDeadlineException {
+            throws UnknownCommandException, InvalidToDoException, InvalidDeadlineException, InvalidEventException {
         String separator = "____________________________________________________________";
         System.out.println("\t" + separator);
         /*if (userInput.equals("bye")) {
@@ -61,11 +61,17 @@ public class BPlusChatter {
             }
             addTask(new Deadline(detailParts[0], detailParts[1]), tasks, index);
             index += 1;
-        } else if (userInput.startsWith("event ") && userInput.contains(" /from") && userInput.contains(" /to ")) {
-            //String task = userInput.split(" ",2)[1];
-            //String[] taskParts = task.split(" /from ");
-            //String[] duration = taskParts[1].split(" /to ");
-            //addTask(new Event(taskParts[0], duration[0], duration[1]), tasks, index);
+        } else if (command.equals("event")) {
+            String[] detailParts = details.split(" /from ", 2);
+            if (detailParts.length != 2) {
+                throw new InvalidEventException();
+            }
+            String[] duration = detailParts[1].split(" /to ", 2);
+            if (duration.length != 2) {
+                throw new InvalidEventException();
+            }
+            addTask(new Event(detailParts[0], duration[0], duration[1]), tasks, index);
+            index += 1;
         }
         else {
             throw new UnknownCommandException();
@@ -100,6 +106,9 @@ public class BPlusChatter {
                 System.out.println("\t" + separator);
             } catch (InvalidDeadlineException e) {
                 System.out.println("\tWRONG FORMAT :(\n " + "\tFormat: deadline <task> /by <date>");
+                System.out.println("\t" + separator);
+            } catch (InvalidEventException e) {
+                System.out.println("\tWRONG FORMAT :(\n " + "\tFormat: event <task> /from <date> /to <date>");
                 System.out.println("\t" + separator);
             }
         }
