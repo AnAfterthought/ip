@@ -4,7 +4,7 @@
 	____________________________________________________________
 	____________________________________________________________
 	UNKNOWN COMMAND :(
- 	Try starting with todo, deadline, event, mark, unmark, list or bye
+ 	Try starting with todo, deadline, event, mark, unmark, list, delete or bye
 	____________________________________________________________
 	____________________________________________________________
 	OK. I've added this task:
