@@ -3,7 +3,6 @@ import java.util.ArrayList;
 
 public class BPlusChatter {
     static ArrayList<Task> tasks = new ArrayList<>();
-    static int count = 0;
 
     public static void list() {
         for (int i = 0; i < tasks.size(); i++) {
@@ -25,29 +24,25 @@ public class BPlusChatter {
 
     public static void addTask(Task task) {
         tasks.add(task);
-        count += 1;
         System.out.println("\tOK. I've added this task:");
         System.out.println("\t\t" + task);
-        System.out.println("\tYou now have " + count + " task(s)");
+        System.out.println("\tYou now have " + tasks.size() + " task(s)");
     }
 
     public static void deleteTask(String details) throws NumberFormatException, IndexOutOfBoundsException {
         int taskIndex = Integer.parseInt(details) - 1;
         Task task = tasks.get(taskIndex);
-        count -= 1;
         System.out.println("\tOk. I've deleted this task:");
         System.out.println("\t\t" + task);
-        System.out.println("\tYou now have " + count + " task(s)");
         tasks.remove(taskIndex);
+        System.out.println("\tYou now have " + tasks.size() + " task(s)");
     }
 
     public static void handleCommands(String userInput)
             throws UnknownCommandException, InvalidToDoException, InvalidDeadlineException, InvalidEventException,
             InvalidMarkException, InvalidUnmarkException, InvalidDeleteException {
-        String separator = "____________________________________________________________";
-        System.out.println("\t" + separator);
 
-        String taskParts[] = userInput.split(" ", 2);
+        String[] taskParts = userInput.split(" ", 2);
         String command = taskParts[0];
         String details = "";
         if (taskParts.length == 2) {
@@ -94,13 +89,9 @@ public class BPlusChatter {
             } catch (Exception e) {
                 throw new InvalidDeleteException();
             }
-        } else if (userInput.equals("bye")) {
-            count = -1;
-            return;
         } else {
             throw new UnknownCommandException();
         }
-        System.out.println("\t" + separator);
     }
 
     public static void main(String[] args) {
@@ -108,34 +99,25 @@ public class BPlusChatter {
         Scanner userInputScanner = new Scanner(System.in);
         String greeting = "Hello! I'm BPlusChatter :)\n\tWhat can I do for you?";
         String exit = "Bye bye. Come back soon!";
-        String separator = "____________________________________________________________";
-        System.out.println("\t" + separator);
         System.out.println("\t" + greeting);
-        System.out.println("\t" + separator);
 
         while (true) {
             try {
                 String userInput = userInputScanner.nextLine();
-                handleCommands(userInput);
-                if (count == -1) {
+                if (userInput.equals("bye")) {
                     System.out.println("\t" + exit);
-                    System.out.println("\t" + separator);
                     break;
                 }
-            } catch (UnknownCommandException e) {
-                System.out.println(e.toString(separator));
-            } catch (InvalidToDoException e) {
-                System.out.println(e.toString(separator));
-            } catch (InvalidDeadlineException e) {
-                System.out.println(e.toString(separator));
-            } catch (InvalidEventException e) {
-                System.out.println(e.toString(separator));
+                handleCommands(userInput);
+            } catch (UnknownCommandException | InvalidToDoException | InvalidDeadlineException |
+                     InvalidEventException e) {
+                System.out.println(e);
             } catch (InvalidMarkException e) {
-                System.out.println(e.toString(count, separator));
+                System.out.println(e.toString(tasks.size()));
             } catch (InvalidUnmarkException e) {
-                System.out.println(e.toString(count, separator));
+                System.out.println(e.toString(tasks.size()));
             } catch (InvalidDeleteException e) {
-                System.out.println(e.toString(count, separator));
+                System.out.println(e.toString(tasks.size()));
             }
         }
     }

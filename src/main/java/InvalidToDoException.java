@@ -1,7 +1,6 @@
 public class InvalidToDoException extends Exception {
 
-    public String toString(String separator) {
-        return "\tWRONG FORMAT :(\n " + "\tFormat: todo <task>\n" +
-                "\t" + separator;
+    public String toString() {
+        return "\tWRONG FORMAT :(\n " + "\tFormat: todo <task>";
     }
 }
