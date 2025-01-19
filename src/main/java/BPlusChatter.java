@@ -48,49 +48,54 @@ public class BPlusChatter {
         if (taskParts.length == 2) {
             details = taskParts[1];
         }
-        if (command.equals("list")) {
-            list();
-        } else if (command.equals("mark")) {
-            try {
-                setIsDone(userInput, true);
-            } catch (Exception e) {
-                throw new InvalidMarkException();
+        switch (command) {
+            case "list" -> list();
+            case "mark" -> {
+                try {
+                    setIsDone(userInput, true);
+                } catch (Exception e) {
+                    throw new InvalidMarkException();
+                }
             }
-        } else if (command.equals("unmark")) {
-            try {
-                setIsDone(userInput, false);
-            } catch (Exception e) {
-                throw new InvalidUnmarkException();
+            case "unmark" -> {
+                try {
+                    setIsDone(userInput, false);
+                } catch (Exception e) {
+                    throw new InvalidUnmarkException();
+                }
             }
-        } else if (command.equals("todo")) {
-            if (details.isEmpty()) {
-                throw new InvalidToDoException();
+            case "todo" -> {
+                if (details.isEmpty()) {
+                    throw new InvalidToDoException();
+                }
+                addTask(new ToDo(taskParts[1]));
             }
-            addTask(new ToDo(taskParts[1]));
-        } else if (command.equals("deadline")) {
-            String[] detailParts = details.split(" /by ",2);
-            if (detailParts.length != 2) {
-                throw new InvalidDeadlineException();
+            case "deadline" -> {
+                String[] detailParts = details.split(" /by ", 2);
+                if (detailParts.length != 2) {
+                    throw new InvalidDeadlineException();
+                }
+                addTask(new Deadline(detailParts[0], detailParts[1]));
             }
-            addTask(new Deadline(detailParts[0], detailParts[1]));
-        } else if (command.equals("event")) {
-            String[] detailParts = details.split(" /from ", 2);
-            if (detailParts.length != 2) {
-                throw new InvalidEventException();
+            case "event" -> {
+                String[] detailParts = details.split(" /from ", 2);
+                if (detailParts.length != 2) {
+                    throw new InvalidEventException();
+                }
+                String[] duration = detailParts[1].split(" /to ", 2);
+                if (duration.length != 2) {
+                    throw new InvalidEventException();
+                }
+                addTask(new Event(detailParts[0], duration[0], duration[1]));
             }
-            String[] duration = detailParts[1].split(" /to ", 2);
-            if (duration.length != 2) {
-                throw new InvalidEventException();
+            case "delete" -> {
+                try {
+                    deleteTask(details);
+                } catch (Exception e) {
+                    throw new InvalidDeleteException();
+                }
             }
-            addTask(new Event(detailParts[0], duration[0], duration[1]));
-        } else if (command.equals("delete")){
-            try {
-                deleteTask(details);
-            } catch (Exception e) {
-                throw new InvalidDeleteException();
-            }
-        } else {
-            throw new UnknownCommandException();
+            default -> throw new UnknownCommandException();
         }
     }
 
