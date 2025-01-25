@@ -27,6 +27,11 @@ public class Event extends Task {
     }
 
     @Override
+    public boolean isSameDate(LocalDateTime dateTime) {
+        return this.from.toLocalDate().equals(dateTime.toLocalDate());
+    }
+
+    @Override
     public String toString() {
         return "[E]" + super.toString() + " (from: " +
                 this.from.format(DateTimeFormatter.ofPattern("MMM d yyyy hh:mm a")) +

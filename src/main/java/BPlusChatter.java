@@ -79,6 +79,17 @@ public class BPlusChatter {
         System.out.println("\tYou now have " + tasks.size() + " task(s)");
     }
 
+    public static void getTasksOnDate(String details) throws DateTimeParseException {
+        LocalDateTime dateTime = LocalDateTime.parse(details + " 0000", dateTimeFormatter);
+        int counter = 1;
+        for (int i = 0; i < tasks.size(); i++) {
+            if (tasks.get(i).isSameDate(dateTime)) {
+                System.out.println("\t"+ counter + "." + tasks.get(i));
+                counter += 1;
+            }
+        }
+    }
+
     public static void handleCommands(String userInput)
             throws UnknownCommandException, InvalidToDoException, InvalidDeadlineException, InvalidEventException,
             InvalidMarkException, InvalidUnmarkException, InvalidDeleteException {
@@ -139,6 +150,17 @@ public class BPlusChatter {
                     throw new InvalidDeleteException();
                 }
             }
+            case "on" -> {
+                if (details.isEmpty()) {
+                    throw new InvalidOnException();
+                }
+                try {
+                    getTasksOnDate(details);
+                } catch (DateTimeParseException e) {
+                    System.out.println(e);
+                    throw new InvalidOnException();
+                }
+            }
             default -> throw new UnknownCommandException();
         }
     }
@@ -173,8 +195,8 @@ public class BPlusChatter {
                 }
                 handleCommands(userInput);
                 saveTasks();
-            } catch (UnknownCommandException | InvalidToDoException | InvalidDeadlineException |
-                     InvalidEventException e) {
+            } catch (UnknownCommandException | InvalidToDoException | InvalidDeadlineException | InvalidEventException |
+                     InvalidOnException e) {
                 System.out.println(e);
             } catch (InvalidMarkException e) {
                 System.out.println(e.toString(tasks.size()));
@@ -184,7 +206,7 @@ public class BPlusChatter {
                 System.out.println(e.toString(tasks.size()));
             } catch (DateTimeParseException e) {
                 System.out.println("\tWrong format :(\nDate and time (24-hour) format: YYYY-MM-DD HHmm");
-            }catch (IOException e) {
+            } catch (IOException e) {
                 System.out.println("Error saving tasks into file!");
             }
         }

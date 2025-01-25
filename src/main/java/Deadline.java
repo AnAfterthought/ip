@@ -22,6 +22,11 @@ public class Deadline extends Task {
     }
 
     @Override
+    public boolean isSameDate(LocalDateTime dateTime) {
+        return this.by.toLocalDate().equals(dateTime.toLocalDate());
+    }
+
+    @Override
     public String toString() {
         return "[D]" + super.toString() + " (by: " +
                 this.by.format(DateTimeFormatter.ofPattern("MMM d yyyy hh:mm a")) + ")";
