@@ -205,9 +205,9 @@ public class BPlusChatter {
             } catch (InvalidDeleteException e) {
                 System.out.println(e.toString(tasks.size()));
             } catch (DateTimeParseException e) {
-                System.out.println("\tWrong format :(\nDate and time (24-hour) format: YYYY-MM-DD HHmm");
+                System.out.println("\tWRONG FORMAT :(\n\tDate and time (24-hour) format: YYYY-MM-DD HHmm");
             } catch (IOException e) {
-                System.out.println("Error saving tasks into file!");
+                System.out.println("\tError saving tasks into file!");
             }
         }
     }
