@@ -1,8 +1,41 @@
 import java.util.Scanner;
 import java.util.ArrayList;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 
 public class BPlusChatter {
     static ArrayList<Task> tasks = new ArrayList<>();
+    static String filePath = "./data/BPlusChatter.txt";
+
+    public static void parseTaskFromFile(String taskString) {
+        String[] taskParts = taskString.split(" \\| ");
+        Task newTask = new Task(taskParts[2]);
+        if (taskParts[0].equals("T")) {
+            newTask = new ToDo(taskParts[2]);
+        } else if (taskParts[0].equals("D")) {
+            newTask = new Deadline(taskParts[2], taskParts[3]);
+        } else if (taskParts[0].equals("E")) {
+            newTask = new Event(taskParts[2], taskParts[3], taskParts[4]);
+        }
+        if (taskParts[1].equals("1")) {
+            newTask.setIsDone(true);
+        }
+        tasks.add(newTask);
+    }
+
+    public static void getTasks() throws IOException {
+        File file = new File(filePath);
+        if (!file.exists()) {
+            file.getParentFile().mkdirs();
+            file.createNewFile();
+        } else {
+            Scanner scanner = new Scanner(file);
+            while (scanner.hasNext()) {
+                parseTaskFromFile(scanner.nextLine());
+            }
+        }
+    }
 
     public static void list() {
         for (int i = 0; i < tasks.size(); i++) {
@@ -99,12 +132,26 @@ public class BPlusChatter {
         }
     }
 
+    public static void saveTasks() throws IOException {
+        FileWriter fileWriter = new FileWriter(filePath);
+        for (int i = 0; i < tasks.size(); i++) {
+            fileWriter.write(tasks.get(i).toFileFormat() + System.lineSeparator());
+        }
+        fileWriter.close();
+    }
+
     public static void main(String[] args) {
 
         Scanner userInputScanner = new Scanner(System.in);
         String greeting = "Hello! I'm BPlusChatter :)\n\tWhat can I do for you?";
         String exit = "Bye bye. Come back soon!";
         System.out.println("\t" + greeting);
+
+        try {
+            getTasks();
+        } catch (IOException e) {
+            System.out.println("Error encountered creating file!");
+        }
 
         while (true) {
             try {
@@ -114,6 +161,7 @@ public class BPlusChatter {
                     break;
                 }
                 handleCommands(userInput);
+                saveTasks();
             } catch (UnknownCommandException | InvalidToDoException | InvalidDeadlineException |
                      InvalidEventException e) {
                 System.out.println(e);
@@ -123,6 +171,8 @@ public class BPlusChatter {
                 System.out.println(e.toString(tasks.size()));
             } catch (InvalidDeleteException e) {
                 System.out.println(e.toString(tasks.size()));
+            } catch (IOException e) {
+                System.out.println("Error saving tasks into file!");
             }
         }
     }
