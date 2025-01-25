@@ -15,6 +15,10 @@ public class Task {
         this.isDone = isDone;
     }
 
+    public String toFileFormat() {
+        return "";
+    }
+
     public String toString() {
         return "[" + getStatusIcon() + "] " + this.description;
     }
