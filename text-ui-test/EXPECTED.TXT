@@ -1,26 +1,26 @@
 	Hello! I'm BPlusChatter :)
 	What can I do for you?
 	UNKNOWN COMMAND :(
- 	Try starting with todo, deadline, event, mark, unmark, list, delete or bye
+ 	Try starting with todo, deadline, event, mark, unmark, list, delete, on or bye
 	OK. I've added this task:
-		[D][ ] return book (by: Monday)
+		[D][ ] return book (by: Feb 1 2025 01:00 pm)
 	You now have 1 task(s)
 	OK. I've added this task:
-		[E][ ] meeting (from: Friday 2pm to: 4pm)
+		[E][ ] meeting (from: Feb 1 2025 02:00 pm to: Feb 1 2025 04:00 pm)
 	You now have 2 task(s)
 	WRONG FORMAT :(
  	Format: mark <task number>
 	You have 2 task(s)
 	WRONG FORMAT :(
- 	Format: deadline <task> /by <date>
+ 	Format: deadline <task> /by <date> <time>
 	Well done! This task is done:
-		[D][X] return book (by: Monday)
-	1.[D][X] return book (by: Monday)
-	2.[E][ ] meeting (from: Friday 2pm to: 4pm)
+		[D][X] return book (by: Feb 1 2025 01:00 pm)
+	1.[D][X] return book (by: Feb 1 2025 01:00 pm)
+	2.[E][ ] meeting (from: Feb 1 2025 02:00 pm to: Feb 1 2025 04:00 pm)
 	Ok, this task is not done yet:
-		[D][ ] return book (by: Monday)
-	1.[D][ ] return book (by: Monday)
-	2.[E][ ] meeting (from: Friday 2pm to: 4pm)
+		[D][ ] return book (by: Feb 1 2025 01:00 pm)
+	1.[D][ ] return book (by: Feb 1 2025 01:00 pm)
+	2.[E][ ] meeting (from: Feb 1 2025 02:00 pm to: Feb 1 2025 04:00 pm)
 	OK. I've added this task:
 		[T][ ] buy eggs
 	You now have 3 task(s)
@@ -28,8 +28,8 @@
  	Format: delete <task number>
 	You have 3 task(s)
 	Ok. I've deleted this task:
-		[D][ ] return book (by: Monday)
+		[D][ ] return book (by: Feb 1 2025 01:00 pm)
 	You now have 2 task(s)
-	1.[E][ ] meeting (from: Friday 2pm to: 4pm)
+	1.[E][ ] meeting (from: Feb 1 2025 02:00 pm to: Feb 1 2025 04:00 pm)
 	2.[T][ ] buy eggs
 	Bye bye. Come back soon!

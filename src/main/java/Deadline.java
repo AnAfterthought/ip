@@ -1,8 +1,11 @@
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+
 public class Deadline extends Task {
 
-    protected String by;
+    protected LocalDateTime by;
 
-    public Deadline(String description, String by) {
+    public Deadline(String description, LocalDateTime by) {
         super(description);
         this.by = by;
     }
@@ -10,16 +13,22 @@ public class Deadline extends Task {
     @Override
     public String toFileFormat() {
         String task = "D |";
-        if (isDone) {
+        if (this.isDone) {
             task += " 1 | ";
         } else {
             task += " 0 | ";
         }
-        return task + description + " | " + by;
+        return task + this.description + " | " + this.by.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HHmm"));
+    }
+
+    @Override
+    public boolean isSameDate(LocalDateTime dateTime) {
+        return this.by.toLocalDate().equals(dateTime.toLocalDate());
     }
 
     @Override
     public String toString() {
-        return "[D]" + super.toString() + " (by: " + this.by + ")";
+        return "[D]" + super.toString() + " (by: " +
+                this.by.format(DateTimeFormatter.ofPattern("MMM d yyyy hh:mm a")) + ")";
     }
 }

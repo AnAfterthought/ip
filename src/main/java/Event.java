@@ -1,9 +1,13 @@
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.Date;
+
 public class Event extends Task {
 
-    protected String from;
-    protected String to;
+    protected LocalDateTime from;
+    protected LocalDateTime to;
 
-    public Event(String description, String from, String to) {
+    public Event(String description, LocalDateTime from, LocalDateTime to) {
         super(description);
         this.from = from;
         this.to = to;
@@ -12,16 +16,25 @@ public class Event extends Task {
     @Override
     public String toFileFormat() {
         String task = "E |";
-        if (isDone) {
+        if (this.isDone) {
             task += " 1 | ";
         } else {
             task += " 0 | ";
         }
-        return task + description + " | " + from + " | " + to;
+        return task + this.description + " | " +
+                this.from.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HHmm")) + " | " +
+                this.to.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HHmm"));
+    }
+
+    @Override
+    public boolean isSameDate(LocalDateTime dateTime) {
+        return this.from.toLocalDate().equals(dateTime.toLocalDate());
     }
 
     @Override
     public String toString() {
-        return "[E]" + super.toString() + " (from: " + this.from + " to: " + this.to +")";
+        return "[E]" + super.toString() + " (from: " +
+                this.from.format(DateTimeFormatter.ofPattern("MMM d yyyy hh:mm a")) +
+                " to: " + this.to.format(DateTimeFormatter.ofPattern("MMM d yyyy hh:mm a")) +")";
     }
 }
