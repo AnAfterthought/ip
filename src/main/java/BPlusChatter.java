@@ -1,3 +1,7 @@
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 import java.util.Scanner;
 import java.util.ArrayList;
 import java.io.File;
@@ -7,6 +11,7 @@ import java.io.IOException;
 public class BPlusChatter {
     static ArrayList<Task> tasks = new ArrayList<>();
     static String filePath = "./data/BPlusChatter.txt";
+    static DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HHmm");
 
     public static void parseTaskFromFile(String taskString) {
         String[] taskParts = taskString.split(" \\| ");
@@ -14,9 +19,12 @@ public class BPlusChatter {
         if (taskParts[0].equals("T")) {
             newTask = new ToDo(taskParts[2]);
         } else if (taskParts[0].equals("D")) {
-            newTask = new Deadline(taskParts[2], taskParts[3]);
+            LocalDateTime by = LocalDateTime.parse(taskParts[3], dateTimeFormatter);
+            newTask = new Deadline(taskParts[2], by);
         } else if (taskParts[0].equals("E")) {
-            newTask = new Event(taskParts[2], taskParts[3], taskParts[4]);
+            LocalDateTime from = LocalDateTime.parse(taskParts[3], dateTimeFormatter);
+            LocalDateTime to = LocalDateTime.parse(taskParts[4], dateTimeFormatter);
+            newTask = new Event(taskParts[2], from, to);
         }
         if (taskParts[1].equals("1")) {
             newTask.setIsDone(true);
@@ -108,7 +116,8 @@ public class BPlusChatter {
                 if (detailParts.length != 2) {
                     throw new InvalidDeadlineException();
                 }
-                addTask(new Deadline(detailParts[0], detailParts[1]));
+                LocalDateTime by = LocalDateTime.parse(detailParts[1], dateTimeFormatter);
+                addTask(new Deadline(detailParts[0], by));
             }
             case "event" -> {
                 String[] detailParts = details.split(" /from ", 2);
@@ -119,7 +128,9 @@ public class BPlusChatter {
                 if (duration.length != 2) {
                     throw new InvalidEventException();
                 }
-                addTask(new Event(detailParts[0], duration[0], duration[1]));
+                LocalDateTime from = LocalDateTime.parse(duration[0], dateTimeFormatter);
+                LocalDateTime to = LocalDateTime.parse(duration[1], dateTimeFormatter);
+                addTask(new Event(detailParts[0], from, to));
             }
             case "delete" -> {
                 try {
@@ -171,7 +182,9 @@ public class BPlusChatter {
                 System.out.println(e.toString(tasks.size()));
             } catch (InvalidDeleteException e) {
                 System.out.println(e.toString(tasks.size()));
-            } catch (IOException e) {
+            } catch (DateTimeParseException e) {
+                System.out.println("\tWrong format :(\nDate and time (24-hour) format: YYYY-MM-DD HHmm");
+            }catch (IOException e) {
                 System.out.println("Error saving tasks into file!");
             }
         }

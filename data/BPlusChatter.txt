@@ -1,4 +1,1 @@
-T | 0 | read book
-T | 1 | eat 
-D | 1 | www | 2pm
-E | 0 | sing | 2pm | /4pm
+D | 0 | read | 2011-01-01 1604
