@@ -18,7 +18,6 @@ public class BPlusChatter {
         storage = new Storage(filePath);
         try {
             tasks = new TaskList(storage.load());
-            tasks.list();
         } catch (IOException e) {
             ui.showLoadingError();
             tasks = new TaskList();
@@ -26,7 +25,19 @@ public class BPlusChatter {
     }
 
     public void run() {
-        //...
+        Parser parser = new Parser();
+        Scanner userInputScanner = new Scanner(System.in);
+        ui.showWelcome();
+        while (true) {
+            String userInput = userInputScanner.nextLine();
+            if (userInput.equalsIgnoreCase("bye")) {
+                ui.showGoodbye();
+                break;
+            }
+            parser.parseCommand(userInput, tasks, ui);
+            //handleCommands(userInput);
+            //saveTasks();
+        }
     }
 
     public static void main(String[] args) {
