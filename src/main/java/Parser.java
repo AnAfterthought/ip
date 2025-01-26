@@ -10,19 +10,19 @@ public class Parser {
         this.dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HHmm");
     }
 
-    TaskList parseToDo(String details, TaskList tasks, Ui ui) throws InvalidToDoException {
+    private TaskList parseToDo(String details, TaskList tasks, Ui ui) throws InvalidToDoException {
         if (details.isEmpty()) {
             throw new InvalidToDoException();
         }
 
         ToDo toDo = new ToDo(details);
-        tasks.add(toDo);
+        TaskList newTasks = tasks.add(toDo);
         ui.showAdd(toDo, tasks);
 
-        return tasks;
+        return newTasks;
     }
 
-    TaskList parseDeadline(String details, TaskList tasks, Ui ui) throws DateTimeParseException,
+    private TaskList parseDeadline(String details, TaskList tasks, Ui ui) throws DateTimeParseException,
             InvalidDeadlineException {
         String[] detailParts = details.split(" /by ", 2);
         if (detailParts.length != 2) {
@@ -31,13 +31,13 @@ public class Parser {
 
         LocalDateTime by = LocalDateTime.parse(detailParts[1], dateTimeFormatter);
         Deadline deadline = new Deadline(detailParts[0], by);
-        tasks.add(deadline);
+        TaskList newTasks = tasks.add(deadline);
         ui.showAdd(deadline, tasks);
 
-        return tasks;
+        return newTasks;
     }
 
-    TaskList parseEvent(String details, TaskList tasks, Ui ui) throws DateTimeParseException,
+    private TaskList parseEvent(String details, TaskList tasks, Ui ui) throws DateTimeParseException,
             InvalidEventException {
         if (details.isEmpty()) {
             throw new InvalidEventException();
@@ -55,10 +55,47 @@ public class Parser {
         LocalDateTime from = LocalDateTime.parse(duration[0], dateTimeFormatter);
         LocalDateTime to = LocalDateTime.parse(duration[1], dateTimeFormatter);
         Event event = new Event(detailParts[0], from, to);
-        tasks.add(event);
+        TaskList newTasks = tasks.add(event);
         ui.showAdd(event, tasks);
 
-        return tasks;
+        return newTasks;
+    }
+
+    TaskList parseMark(String details, TaskList tasks, Ui ui, boolean isDone) throws InvalidMarkException {
+        try {
+            int taskIndex = Integer.parseInt(details) - 1;
+            tasks.get(taskIndex).setIsDone(isDone);
+            ui.showMark(isDone, tasks.get(taskIndex));
+            return tasks;
+        } catch (NumberFormatException | IndexOutOfBoundsException e) {
+            throw new InvalidMarkException();
+        }
+    }
+
+    TaskList parseDelete(String details, TaskList tasks, Ui ui) throws InvalidDeleteException {
+        try {
+            int taskIndex = Integer.parseInt(details) - 1;
+            Task task = tasks.get(taskIndex);
+            TaskList newTasks = tasks.remove(taskIndex);
+            ui.showDelete(task, newTasks.size());
+            return newTasks;
+        } catch (NumberFormatException | IndexOutOfBoundsException e) {
+            throw new InvalidDeleteException();
+        }
+    }
+
+    void parseOn(String details, TaskList tasks) throws InvalidOnException, DateTimeParseException {
+        if (details.isEmpty()) {
+            throw new InvalidOnException();
+        }
+        LocalDateTime dateTime = LocalDateTime.parse(details + " 0000", dateTimeFormatter);
+        int counter = 1;
+        for (int i = 0; i < tasks.size(); i++) {
+            if (tasks.get(i).isSameDate(dateTime)) {
+                System.out.println("\t"+ counter + "." + tasks.get(i));
+                counter += 1;
+            }
+        }
     }
 
     TaskList parseCommand(String userInput, TaskList tasks, Ui ui) {
@@ -80,6 +117,16 @@ public class Parser {
                 case "event" -> {
                     return parseEvent(details, tasks, ui);
                 }
+                case "mark" -> {
+                    return parseMark(details, tasks, ui, true);
+                }
+                case "unmark" -> {
+                    return parseMark(details, tasks, ui, false);
+                }
+                case "delete" -> {
+                    return parseDelete(details, tasks, ui);
+                }
+                case "on" -> parseOn(details, tasks);
                 default -> throw new UnknownCommandException();
             }
         } catch (UnknownCommandException e) {
@@ -92,6 +139,12 @@ public class Parser {
             ui.showEventError();
         } catch (DateTimeParseException e) {
             ui.showDateTimeFormatError();
+        } catch (InvalidMarkException e) {
+            ui.showMarkError(tasks.size());
+        } catch (InvalidDeleteException e) {
+            ui.showDeleteError(tasks.size());
+        } catch (InvalidOnException e) {
+            ui.showOnError();
         }
         return tasks;
     }

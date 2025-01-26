@@ -9,10 +9,13 @@
 		[E][ ] meeting (from: Feb 1 2025 02:00 pm to: Feb 1 2025 04:00 pm)
 	You now have 2 task(s)
 	WRONG FORMAT :(
- 	Format: mark <task number>
+ 	Format: mark/unmark <task number>
 	You have 2 task(s)
 	WRONG FORMAT :(
  	Format: deadline <task> /by <date> <time>
+	WRONG FORMAT :(
+ 	Format: mark/unmark <task number>
+	You have 2 task(s)
 	Well done! This task is done:
 		[D][X] return book (by: Feb 1 2025 01:00 pm)
 	1.[D][X] return book (by: Feb 1 2025 01:00 pm)
@@ -25,7 +28,7 @@
 		[T][ ] buy eggs
 	You now have 3 task(s)
 	WRONG FORMAT :(
- 	Format: delete <task number>
+	Format: delete <task number>
 	You have 3 task(s)
 	Ok. I've deleted this task:
 		[D][ ] return book (by: Feb 1 2025 01:00 pm)

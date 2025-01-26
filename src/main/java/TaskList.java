@@ -16,8 +16,17 @@ public class TaskList {
         return new TaskList(this.tasks);
     }
 
+    TaskList remove(int index) {
+        this.tasks.remove(index);
+        return new TaskList(this.tasks);
+    }
+
     int size() {
         return tasks.size();
+    }
+
+    Task get(int index) {
+        return tasks.get(index);
     }
 
     void list() {
