@@ -1,6 +1,7 @@
+package bpluschatter.task;
+
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.Date;
 
 public class Event extends Task {
 

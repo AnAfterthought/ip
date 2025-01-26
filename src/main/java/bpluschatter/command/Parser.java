@@ -1,3 +1,21 @@
+package bpluschatter.command;
+
+import bpluschatter.exception.InvalidDeadlineException;
+import bpluschatter.exception.InvalidEventException;
+import bpluschatter.exception.InvalidMarkException;
+import bpluschatter.exception.InvalidToDoException;
+import bpluschatter.exception.InvalidOnException;
+import bpluschatter.exception.InvalidDeleteException;
+import bpluschatter.exception.UnknownCommandException;
+
+import bpluschatter.task.Task;
+import bpluschatter.task.TaskList;
+import bpluschatter.task.ToDo;
+import bpluschatter.task.Deadline;
+import bpluschatter.task.Event;
+
+import bpluschatter.ui.Ui;
+
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
@@ -6,7 +24,7 @@ public class Parser {
 
     private final DateTimeFormatter dateTimeFormatter;
 
-    Parser() {
+    public Parser() {
         this.dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HHmm");
     }
 
@@ -61,7 +79,7 @@ public class Parser {
         return newTasks;
     }
 
-    TaskList parseMark(String details, TaskList tasks, Ui ui, boolean isDone) throws InvalidMarkException {
+    private TaskList parseMark(String details, TaskList tasks, Ui ui, boolean isDone) throws InvalidMarkException {
         try {
             int taskIndex = Integer.parseInt(details) - 1;
             tasks.get(taskIndex).setIsDone(isDone);
@@ -72,7 +90,7 @@ public class Parser {
         }
     }
 
-    TaskList parseDelete(String details, TaskList tasks, Ui ui) throws InvalidDeleteException {
+    private TaskList parseDelete(String details, TaskList tasks, Ui ui) throws InvalidDeleteException {
         try {
             int taskIndex = Integer.parseInt(details) - 1;
             Task task = tasks.get(taskIndex);
@@ -84,7 +102,7 @@ public class Parser {
         }
     }
 
-    void parseOn(String details, TaskList tasks) throws InvalidOnException, DateTimeParseException {
+    private void parseOn(String details, TaskList tasks) throws InvalidOnException, DateTimeParseException {
         if (details.isEmpty()) {
             throw new InvalidOnException();
         }
@@ -98,7 +116,7 @@ public class Parser {
         }
     }
 
-    TaskList parseCommand(String userInput, TaskList tasks, Ui ui) {
+    public TaskList parseCommand(String userInput, TaskList tasks, Ui ui) {
         String[] taskParts = userInput.split(" ", 2);
         String command = taskParts[0];
         String details = "";
@@ -149,18 +167,20 @@ public class Parser {
         return tasks;
     }
 
-    Task parseFromFile(String taskString) {
+    public Task parseFromFile(String taskString) {
         String[] taskParts = taskString.split(" \\| ");
         Task newTask = new Task(taskParts[2]);
-        if (taskParts[0].equals("T")) {
-            newTask = new ToDo(taskParts[2]);
-        } else if (taskParts[0].equals("D")) {
-            LocalDateTime by = LocalDateTime.parse(taskParts[3], dateTimeFormatter);
-            newTask = new Deadline(taskParts[2], by);
-        } else if (taskParts[0].equals("E")) {
-            LocalDateTime from = LocalDateTime.parse(taskParts[3], dateTimeFormatter);
-            LocalDateTime to = LocalDateTime.parse(taskParts[4], dateTimeFormatter);
-            newTask = new Event(taskParts[2], from, to);
+        switch (taskParts[0]) {
+            case "T" -> newTask = new ToDo(taskParts[2]);
+            case "D" -> {
+                LocalDateTime by = LocalDateTime.parse(taskParts[3], dateTimeFormatter);
+                newTask = new Deadline(taskParts[2], by);
+            }
+            case "E" -> {
+                LocalDateTime from = LocalDateTime.parse(taskParts[3], dateTimeFormatter);
+                LocalDateTime to = LocalDateTime.parse(taskParts[4], dateTimeFormatter);
+                newTask = new Event(taskParts[2], from, to);
+            }
         }
         if (taskParts[1].equals("1")) {
             newTask.setIsDone(true);

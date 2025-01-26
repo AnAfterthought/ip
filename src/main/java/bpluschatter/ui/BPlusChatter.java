@@ -1,3 +1,9 @@
+package bpluschatter.ui;
+
+import bpluschatter.storage.Storage;
+import bpluschatter.task.TaskList;
+import bpluschatter.command.Parser;
+
 import java.util.Scanner;
 import java.io.IOException;
 
