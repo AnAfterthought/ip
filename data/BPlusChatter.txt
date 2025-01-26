@@ -2,3 +2,4 @@ T | 0 | read book
 D | 1 | read book | 2020-01-01 1600
 E | 1 | read book | 2020-01-01 1200 | 2020-01-01 1500
 T | 0 | exercse]
+T | 1 | exercise

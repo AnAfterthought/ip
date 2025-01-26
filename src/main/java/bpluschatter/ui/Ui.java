@@ -5,7 +5,7 @@ import bpluschatter.task.TaskList;
 
 public class Ui {
     public void showWelcome() {
-        String greeting = "\tHello! I'm bpluschatter.ui.BPlusChatter :)\n\tWhat can I do for you?";
+        String greeting = "\tHello! I'm BPlusChatter :)\n\tWhat can I do for you?";
         System.out.println(greeting);
     }
 
