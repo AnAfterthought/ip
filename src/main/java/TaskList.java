@@ -1,0 +1,37 @@
+import java.util.ArrayList;
+
+public class TaskList {
+    private ArrayList<Task> tasks;
+
+    TaskList() {
+        this.tasks = new ArrayList<>();
+    }
+
+    TaskList(ArrayList<Task> tasks) {
+        this.tasks = tasks;
+    }
+
+    TaskList add(Task task) {
+        this.tasks.add(task);
+        return new TaskList(this.tasks);
+    }
+
+    TaskList remove(int index) {
+        this.tasks.remove(index);
+        return new TaskList(this.tasks);
+    }
+
+    int size() {
+        return tasks.size();
+    }
+
+    Task get(int index) {
+        return tasks.get(index);
+    }
+
+    void list() {
+        for (int i = 0; i < tasks.size(); i++) {
+            System.out.println("\t"+ (i + 1) + "." + tasks.get(i));
+        }
+    }
+}
