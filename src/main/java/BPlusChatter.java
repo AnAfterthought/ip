@@ -9,7 +9,29 @@ import java.io.FileWriter;
 import java.io.IOException;
 
 public class BPlusChatter {
-    static ArrayList<Task> tasks = new ArrayList<>();
+    private Storage storage;
+    private TaskList tasks;
+    private Ui ui;
+
+    public BPlusChatter(String filePath) {
+        ui = new Ui();
+        storage = new Storage(filePath);
+        try {
+            storage.load();
+            //tasks = new TaskList(storage.load());
+        } catch (IOException e) {
+            System.out.println(e);
+        }
+    }
+
+    public void run() {
+        //...
+    }
+
+    public static void main(String[] args) {
+        new BPlusChatter("./data/BPlusChatter.txt").run();
+    }
+    /*static ArrayList<Task> tasks = new ArrayList<>();
     static String filePath = "./data/BPlusChatter.txt";
     static DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HHmm");
 
@@ -210,5 +232,5 @@ public class BPlusChatter {
                 System.out.println("\tError saving tasks into file!");
             }
         }
-    }
+    }*/
 }
