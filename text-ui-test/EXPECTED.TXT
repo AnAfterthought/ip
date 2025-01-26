@@ -1,4 +1,4 @@
-	Hello! I'm BPlusChatter :)
+	Hello! I'm bpluschatter.ui.BPlusChatter :)
 	What can I do for you?
 	UNKNOWN COMMAND :(
  	Try starting with todo, deadline, event, mark, unmark, list, delete, on or bye

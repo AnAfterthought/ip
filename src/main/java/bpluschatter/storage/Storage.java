@@ -1,3 +1,9 @@
+package bpluschatter.storage;
+
+import bpluschatter.command.Parser;
+import bpluschatter.task.Task;
+import bpluschatter.task.TaskList;
+
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -8,12 +14,12 @@ public class Storage {
     private final String filePath;
     private final Parser parser;
 
-    Storage(String filePath) {
+    public Storage(String filePath) {
         this.filePath = filePath;
         this.parser = new Parser();
     }
 
-    ArrayList<Task> load() throws IOException {
+    public ArrayList<Task> load() throws IOException {
         File file = new File(filePath);
         ArrayList<Task> tasks = new ArrayList<>();
         if (!file.exists()) {
@@ -28,7 +34,7 @@ public class Storage {
         return tasks;
     }
 
-    void save(TaskList tasks) throws IOException {
+    public void save(TaskList tasks) throws IOException {
         FileWriter fileWriter = new FileWriter(filePath);
         for (int i = 0; i < tasks.size(); i++) {
             fileWriter.write(tasks.get(i).toFileFormat() + System.lineSeparator());
