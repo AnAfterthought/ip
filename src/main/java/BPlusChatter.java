@@ -17,10 +17,11 @@ public class BPlusChatter {
         ui = new Ui();
         storage = new Storage(filePath);
         try {
-            storage.load();
-            //tasks = new TaskList(storage.load());
+            tasks = new TaskList(storage.load());
+            tasks.list();
         } catch (IOException e) {
-            System.out.println(e);
+            ui.showLoadingError();
+            tasks = new TaskList();
         }
     }
 
