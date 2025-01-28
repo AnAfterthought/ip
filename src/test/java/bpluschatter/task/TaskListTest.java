@@ -7,6 +7,9 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import java.util.ArrayList;
 
 public class TaskListTest {
+    /**
+     * Tests for successful addition of task.
+     */
     @Test
     public void testAdd() {
         ArrayList<Task> tasksOne = new ArrayList<>();
@@ -24,6 +27,9 @@ public class TaskListTest {
                 "Check that TaskList is correct after adding task");
     }
 
+    /**
+     * Tests for successful deletion of task.
+     */
     @Test
     public void testDelete() {
         TaskList testTaskList = new TaskList();
@@ -37,6 +43,9 @@ public class TaskListTest {
                 "Check that TaskList is correct after deleting task");
     }
 
+    /**
+     * Tests for successful retrieval of task.
+     */
     @Test
     public void testGet() {
         TaskList testTaskList = new TaskList();
@@ -44,7 +53,7 @@ public class TaskListTest {
         testTaskList = testTaskList.remove(0);
         testTaskList = testTaskList.add(new ToDo("Exercise")).add(new ToDo("Clean room"));
 
-        assertEquals("Exercise", testTaskList.get(1).toString(),
+        assertEquals("[T][ ] Exercise", testTaskList.get(1).toString(),
                 "Check that TaskList gets correct task");
     }
 }

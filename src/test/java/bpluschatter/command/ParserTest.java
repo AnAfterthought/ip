@@ -9,6 +9,9 @@ import bpluschatter.ui.Ui;
 import bpluschatter.task.TaskList;
 
 public class ParserTest {
+    /**
+     * Tests for successful todo command.
+     */
     @Test
     public void testParseToDo_success() {
         Ui ui = new Ui();
@@ -22,6 +25,9 @@ public class ParserTest {
                 "Check task list is correct after command");
     }
 
+    /**
+     * Tests for incorrect todo command.
+     */
     @Test
     public void testParseToDo_failure() {
         Ui ui = new Ui();
@@ -34,6 +40,9 @@ public class ParserTest {
         assertEquals(0, testTaskLists.size(), "Check size is correct after error");
     }
 
+    /**
+     * Tests for successful deadline command.
+     */
     @Test
     public void testParseDeadline_success() {
         Ui ui = new Ui();
@@ -47,6 +56,9 @@ public class ParserTest {
                 "Check task list is correct after command");
     }
 
+    /**
+     * Tests for incorrect deadline command.
+     */
     @Test
     public void testParseDeadline_failure() {
         Ui ui = new Ui();
@@ -59,6 +71,9 @@ public class ParserTest {
         assertEquals(0, testTaskLists.size(), "Check size is correct after error");
     }
 
+    /**
+     * Tests for successful event command.
+     */
     @Test
     public void testParseEvent_success() {
         Ui ui = new Ui();
@@ -73,6 +88,9 @@ public class ParserTest {
                 testTaskLists.get(0).toString(), "Check task list is correct after command");
     }
 
+    /**
+     * Tests for incorrect event command.
+     */
     @Test
     public void testParseEvent_failure() {
         Ui ui = new Ui();
@@ -87,6 +105,9 @@ public class ParserTest {
         assertEquals(0, testTaskLists.size(), "Check size is correct after error");
     }
 
+    /**
+     * Tests for successful delete command.
+     */
     @Test
     public void testParseDelete_success() {
         Ui ui = new Ui();
@@ -105,6 +126,9 @@ public class ParserTest {
                 "Check tasks are correct after delete");
     }
 
+    /**
+     * Tests for incorrect delete command.
+     */
     @Test
     public void testParseDelete_fail() {
         Ui ui = new Ui();
@@ -119,6 +143,9 @@ public class ParserTest {
                 "Check tasks are correct after error");
     }
 
+    /**
+     * Tests for successful mark command.
+     */
     @Test
     public void testParseMark() {
         Ui ui = new Ui();
@@ -135,6 +162,9 @@ public class ParserTest {
                 "Check that correct task is marked");
     }
 
+    /**
+     * Tests for successful unmark command.
+     */
     @Test
     public void testParseUnmark() {
         Ui ui = new Ui();

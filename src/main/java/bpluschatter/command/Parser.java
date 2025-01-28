@@ -20,14 +20,32 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 
+/**
+ * Represents a parser to make sense of user commands.
+ * The parser can also make sense of tasks from save files.
+ */
+
 public class Parser {
 
     private final DateTimeFormatter dateTimeFormatter;
 
+    /**
+     * Constructor for Parser.
+     * Sets the DateTimeFormatter object for parsing date and time strings.
+     */
     public Parser() {
         this.dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HHmm");
     }
 
+    /**
+     * Returns updated list of tasks after adding ToDo task.
+     *
+     * @param details Details of todo command.
+     * @param tasks List of tasks.
+     * @param ui UI object.
+     * @return Updated list of tasks.
+     * @throws InvalidToDoException If details is empty.
+     */
     private TaskList parseToDo(String details, TaskList tasks, Ui ui) throws InvalidToDoException {
         if (details.isEmpty()) {
             throw new InvalidToDoException();
@@ -40,6 +58,16 @@ public class Parser {
         return newTasks;
     }
 
+    /**
+     * Returns updated list of tasks after adding Deadline task.
+     *
+     * @param details Details of deadline command.
+     * @param tasks List of tasks.
+     * @param ui UI object.
+     * @return Updated list of tasks.
+     * @throws DateTimeParseException If date and time format is wrong.
+     * @throws InvalidDeadlineException If deadline command is incomplete.
+     */
     private TaskList parseDeadline(String details, TaskList tasks, Ui ui) throws DateTimeParseException,
             InvalidDeadlineException {
         String[] detailParts = details.split(" /by ", 2);
@@ -55,6 +83,16 @@ public class Parser {
         return newTasks;
     }
 
+    /**
+     * Returns updated list of tasks after adding Event task.
+     *
+     * @param details Details of event command.
+     * @param tasks List of tasks.
+     * @param ui UI object.
+     * @return Updated list of tasks.
+     * @throws DateTimeParseException If date and time format is wrong.
+     * @throws InvalidEventException If event command is incomplete.
+     */
     private TaskList parseEvent(String details, TaskList tasks, Ui ui) throws DateTimeParseException,
             InvalidEventException {
         if (details.isEmpty()) {
@@ -79,6 +117,16 @@ public class Parser {
         return newTasks;
     }
 
+    /**
+     * Returns updated list of tasks after adding marking/unmarking a task.
+     *
+     * @param details Index of task to be marked/unmarked.
+     * @param tasks List of tasks.
+     * @param ui UI object.
+     * @param isDone Is true if task is marked as completed, false if unmarked.
+     * @return Updated list of tasks.
+     * @throws InvalidMarkException If index is not a number or index larger than number of tasks.
+     */
     private TaskList parseMark(String details, TaskList tasks, Ui ui, boolean isDone) throws InvalidMarkException {
         try {
             int taskIndex = Integer.parseInt(details) - 1;
@@ -90,6 +138,15 @@ public class Parser {
         }
     }
 
+    /**
+     * Returns updated list of tasks after adding deleting a task.
+     *
+     * @param details Index of task to be deleted.
+     * @param tasks List of tasks.
+     * @param ui UI object.
+     * @return Updated list of tasks.
+     * @throws InvalidDeleteException If index is not a number or index larger than number of tasks.
+     */
     private TaskList parseDelete(String details, TaskList tasks, Ui ui) throws InvalidDeleteException {
         try {
             int taskIndex = Integer.parseInt(details) - 1;
@@ -102,6 +159,14 @@ public class Parser {
         }
     }
 
+    /**
+     * Prints tasks that occur on specific date.
+     *
+     * @param details Date in format yyyy-MM-dd.
+     * @param tasks List of tasks.
+     * @throws InvalidOnException If details is empty.
+     * @throws DateTimeParseException If date format is wrong or on command is incomplete or incorrect.
+     */
     private void parseOn(String details, TaskList tasks) throws InvalidOnException, DateTimeParseException {
         if (details.isEmpty()) {
             throw new InvalidOnException();
@@ -116,6 +181,15 @@ public class Parser {
         }
     }
 
+    /**
+     * Returns updated TaskList after modification commands.
+     * Returns same TaskList after commands that do not modify TaskList.
+     *
+     * @param userInput Command.
+     * @param tasks List of tasks.
+     * @param ui UI object.
+     * @return Updated list of tasks.
+     */
     public TaskList parseCommand(String userInput, TaskList tasks, Ui ui) {
         String[] taskParts = userInput.split(" ", 2);
         String command = taskParts[0];
@@ -167,6 +241,12 @@ public class Parser {
         return tasks;
     }
 
+    /**
+     * Returns task parsed from a line in the save file.
+     *
+     * @param taskString String from save file.
+     * @return Task.
+     */
     public Task parseFromFile(String taskString) {
         String[] taskParts = taskString.split(" \\| ");
         Task newTask = new Task(taskParts[2]);
