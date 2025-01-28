@@ -1,5 +1,6 @@
 package bpluschatter.command;
 
+import bpluschatter.task.ToDo;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -7,6 +8,9 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import bpluschatter.ui.Ui;
 
 import bpluschatter.task.TaskList;
+
+import java.io.ByteArrayOutputStream;
+import java.io.PrintStream;
 
 public class ParserTest {
     /**
@@ -181,5 +185,29 @@ public class ParserTest {
                 "Check that correct task is unmarked");
         assertEquals("[T][ ] Eat", testTaskLists.get(1).toString(),
                 "Check that correct task is unmarked");
+    }
+
+    /**
+     * Tests for successful find command.
+     */
+    @Test
+    public void testParseFind() {
+        Ui ui = new Ui();
+        Parser parser = new Parser();
+        TaskList testTaskLists = new TaskList();
+
+        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+        System.setOut(new PrintStream(outputStream));
+
+        testTaskLists = testTaskLists.add(new ToDo("Read book"));
+        testTaskLists = testTaskLists.add(new ToDo("Eat"));
+        testTaskLists = testTaskLists.add(new ToDo("Write book"));
+        parser.parseCommand("find book", testTaskLists, ui);
+
+        assertEquals("\tHere are the tasks I found:\n\t1.[T][ ] Read book\n\t2.[T][ ] Write book\n",
+                outputStream.toString().replaceAll("\r\n","\n"),
+                "Check that correct tasks are found");
+
+        System.setOut(System.out);
     }
 }
