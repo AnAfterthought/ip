@@ -14,10 +14,10 @@ public class Ui {
         System.out.println(exit);
     }
 
-    public void showAdd(Task task, TaskList tasks) {
+    public void showAdd(Task task, int count) {
         System.out.println("\tOK. I've added this task:");
         System.out.println("\t\t" + task);
-        System.out.println("\tYou now have " + tasks.size() + " task(s)");
+        System.out.println("\tYou now have " + count + " task(s)");
     }
 
     public void showMark(boolean isDone, Task task) {

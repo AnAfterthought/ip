@@ -35,7 +35,7 @@ public class Parser {
 
         ToDo toDo = new ToDo(details);
         TaskList newTasks = tasks.add(toDo);
-        ui.showAdd(toDo, tasks);
+        ui.showAdd(toDo, tasks.size());
 
         return newTasks;
     }
@@ -50,7 +50,7 @@ public class Parser {
         LocalDateTime by = LocalDateTime.parse(detailParts[1], dateTimeFormatter);
         Deadline deadline = new Deadline(detailParts[0], by);
         TaskList newTasks = tasks.add(deadline);
-        ui.showAdd(deadline, tasks);
+        ui.showAdd(deadline, tasks.size());
 
         return newTasks;
     }
@@ -74,7 +74,7 @@ public class Parser {
         LocalDateTime to = LocalDateTime.parse(duration[1], dateTimeFormatter);
         Event event = new Event(detailParts[0], from, to);
         TaskList newTasks = tasks.add(event);
-        ui.showAdd(event, tasks);
+        ui.showAdd(event, tasks.size());
 
         return newTasks;
     }
