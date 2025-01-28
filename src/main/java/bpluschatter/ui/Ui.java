@@ -27,12 +27,12 @@ public class Ui {
      * Prints message after addition of a task.
      *
      * @param task Task that was added.
-     * @param tasks List of tasks after task was added.
+     * @param count Number of tasks after task was added.
      */
-    public void showAdd(Task task, TaskList tasks) {
+    public void showAdd(Task task, int count) {
         System.out.println("\tOK. I've added this task:");
         System.out.println("\t\t" + task);
-        System.out.println("\tYou now have " + tasks.size() + " task(s)");
+        System.out.println("\tYou now have " + count + " task(s)");
     }
 
     /**
