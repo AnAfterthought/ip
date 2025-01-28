@@ -61,7 +61,7 @@ public class Ui {
 
     public void showUnknownCommandError() {
         System.out.println("\tUNKNOWN COMMAND :(\n " +
-                "\tTry starting with todo, deadline, event, mark, unmark, list, delete, on or bye");
+                "\tTry starting with todo, deadline, event, mark, unmark, list, delete, on, find or bye");
     }
 
     public void showDateTimeFormatError() {
@@ -76,5 +76,15 @@ public class Ui {
     public void showDeleteError(int count) {
         System.out.println("\tWRONG FORMAT :(\n\tFormat: delete <task number>\n" +
                 "\tYou have " + count + " task(s)");
+    }
+
+    /**
+     * Prints tasks containing a keyword.
+     *
+     * @param tasks List of tasks containing a keyword.
+     */
+    public void showFind(TaskList tasks) {
+        System.out.println("\tHere are the tasks I found:");
+        tasks.list();
     }
 }

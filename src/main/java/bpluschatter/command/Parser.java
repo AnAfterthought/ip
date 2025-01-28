@@ -116,6 +116,24 @@ public class Parser {
         }
     }
 
+    /**
+     * Prints tasks containing specified keyword.
+     *
+     * @param details Keyword to be found.
+     * @param tasks List of tasks currently available.
+     * @param ui UI object.
+     */
+    private void parseFind(String details, TaskList tasks, Ui ui) {
+        TaskList validTasks = new TaskList();
+        for (int i = 0; i < tasks.size(); i++) {
+            String taskDescription = tasks.get(i).toString().toLowerCase();
+            if (taskDescription.contains(details.toLowerCase())) {
+                validTasks.add(tasks.get(i));
+            }
+        }
+        ui.showFind(validTasks);
+    }
+
     public TaskList parseCommand(String userInput, TaskList tasks, Ui ui) {
         String[] taskParts = userInput.split(" ", 2);
         String command = taskParts[0];
@@ -145,6 +163,7 @@ public class Parser {
                     return parseDelete(details, tasks, ui);
                 }
                 case "on" -> parseOn(details, tasks);
+                case "find" -> parseFind(details, tasks, ui);
                 default -> throw new UnknownCommandException();
             }
         } catch (UnknownCommandException e) {

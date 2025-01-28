@@ -44,7 +44,7 @@ public class TaskListTest {
         testTaskList = testTaskList.remove(0);
         testTaskList = testTaskList.add(new ToDo("Exercise")).add(new ToDo("Clean room"));
 
-        assertEquals("Exercise", testTaskList.get(1).toString(),
+        assertEquals("[T][ ] Exercise", testTaskList.get(1).toString(),
                 "Check that TaskList gets correct task");
     }
 }
