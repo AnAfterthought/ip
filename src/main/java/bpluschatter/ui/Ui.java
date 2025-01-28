@@ -41,8 +41,8 @@ public class Ui {
      * @param isDone Completion status of task.
      * @param task Task that was marked/unmarked.
      */
-    public void showMark(boolean isDone, Task task) {
-        if (isDone) {
+    public void showMark(Task task) {
+        if (task.getIsDone()) {
             System.out.println("\tWell done! This task is done:");
         } else {
             System.out.println("\tOk, this task is not done yet:");

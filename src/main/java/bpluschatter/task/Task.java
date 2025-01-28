@@ -38,6 +38,15 @@ public class Task {
     }
 
     /**
+     * Returns completion status of task.
+     *
+     * @return Completion status of task.
+     */
+    public boolean getIsDone() {
+        return this.isDone;
+    }
+
+    /**
      * Returns string to be saved in file.
      *
      * @return String to be saved in file.

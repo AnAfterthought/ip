@@ -131,7 +131,7 @@ public class Parser {
         try {
             int taskIndex = Integer.parseInt(details) - 1;
             tasks.get(taskIndex).setIsDone(isDone);
-            ui.showMark(isDone, tasks.get(taskIndex));
+            ui.showMark(tasks.get(taskIndex));
             return tasks;
         } catch (NumberFormatException | IndexOutOfBoundsException e) {
             throw new InvalidMarkException();
