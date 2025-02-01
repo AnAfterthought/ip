@@ -37,9 +37,9 @@ public class Event extends Task {
         } else {
             task += " 0 | ";
         }
-        return task + this.description + " | " +
-                this.from.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HHmm")) + " | " +
-                this.to.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HHmm"));
+        return task + this.description + " | "
+                + this.from.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HHmm")) + " | "
+                + this.to.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HHmm"));
     }
 
     /**
@@ -60,8 +60,8 @@ public class Event extends Task {
      */
     @Override
     public String toString() {
-        return "[E]" + super.toString() + " (from: " +
-                this.from.format(DateTimeFormatter.ofPattern("MMM d yyyy hh:mm a")) +
-                " to: " + this.to.format(DateTimeFormatter.ofPattern("MMM d yyyy hh:mm a")) +")";
+        return "[E]" + super.toString() + " (from: "
+                + this.from.format(DateTimeFormatter.ofPattern("MMM d yyyy hh:mm a"))
+                + " to: " + this.to.format(DateTimeFormatter.ofPattern("MMM d yyyy hh:mm a")) + ")";
     }
 }

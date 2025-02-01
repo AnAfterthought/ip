@@ -1,17 +1,25 @@
 package bpluschatter.ui;
 
+import java.io.IOException;
+import java.util.Scanner;
+
+import bpluschatter.command.Parser;
 import bpluschatter.storage.Storage;
 import bpluschatter.task.TaskList;
-import bpluschatter.command.Parser;
 
-import java.util.Scanner;
-import java.io.IOException;
-
+/**
+ * Creates and runs chatbot
+ */
 public class BPlusChatter {
     private Storage storage;
     private TaskList tasks;
     private Ui ui;
 
+    /**
+     * Constructor for chatbot BPlusChatter.
+     *
+     * @param filePath Save file for chatbot.
+     */
     public BPlusChatter(String filePath) {
         ui = new Ui();
         storage = new Storage(filePath);
@@ -23,6 +31,9 @@ public class BPlusChatter {
         }
     }
 
+    /**
+     * Parses user commands and returns results.
+     */
     public void run() {
         Parser parser = new Parser();
         Scanner userInputScanner = new Scanner(System.in);
@@ -42,6 +53,12 @@ public class BPlusChatter {
         }
     }
 
+
+    /**
+     * Runs chatbot.
+     *
+     * @param args Command line arguments if any.
+     */
     public static void main(String[] args) {
         new BPlusChatter("./data/BPlusChatter.txt").run();
     }
