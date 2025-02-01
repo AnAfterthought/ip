@@ -70,7 +70,7 @@ public class TaskList {
      */
     public void list() {
         for (int i = 0; i < tasks.size(); i++) {
-            System.out.println("\t"+ (i + 1) + "." + tasks.get(i));
+            System.out.println("\t" + (i + 1) + "." + tasks.get(i));
         }
     }
 }

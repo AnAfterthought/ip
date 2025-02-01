@@ -1,14 +1,14 @@
 package bpluschatter.storage;
 
-import bpluschatter.command.Parser;
-import bpluschatter.task.Task;
-import bpluschatter.task.TaskList;
-
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Scanner;
+
+import bpluschatter.command.Parser;
+import bpluschatter.task.Task;
+import bpluschatter.task.TaskList;
 
 /**
  * Saves tasks into a file.

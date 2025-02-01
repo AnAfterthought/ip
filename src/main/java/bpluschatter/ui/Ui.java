@@ -38,7 +38,6 @@ public class Ui {
     /**
      * Prints message after marking/unmarking a task.
      *
-     * @param isDone Completion status of task.
      * @param task Task that was marked/unmarked.
      */
     public void showMark(Task task) {
@@ -108,8 +107,8 @@ public class Ui {
      * Prints error message for unknown commands.
      */
     public void showUnknownCommandError() {
-        System.out.println("\tUNKNOWN COMMAND :(\n " +
-                "\tTry starting with todo, deadline, event, mark, unmark, list, delete, on, find or bye");
+        System.out.println("\tUNKNOWN COMMAND :(\n "
+                + "\tTry starting with todo, deadline, event, mark, unmark, list, delete, on, find or bye");
     }
 
     /**
@@ -123,16 +122,16 @@ public class Ui {
      * Prints error message for mark/unmark command.
      */
     public void showMarkError(int count) {
-        System.out.println("\tWRONG FORMAT :(\n " + "\tFormat: mark/unmark <task number>\n" +
-                "\tYou have " + count + " task(s)");
+        System.out.println("\tWRONG FORMAT :(\n " + "\tFormat: mark/unmark <task number>\n"
+                + "\tYou have " + count + " task(s)");
     }
 
     /**
      * Prints error message for delete command.
      */
     public void showDeleteError(int count) {
-        System.out.println("\tWRONG FORMAT :(\n\tFormat: delete <task number>\n" +
-                "\tYou have " + count + " task(s)");
+        System.out.println("\tWRONG FORMAT :(\n\tFormat: delete <task number>\n"
+                + "\tYou have " + count + " task(s)");
     }
 
     /**

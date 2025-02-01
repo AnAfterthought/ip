@@ -1,24 +1,22 @@
 package bpluschatter.command;
 
-import bpluschatter.exception.InvalidDeadlineException;
-import bpluschatter.exception.InvalidEventException;
-import bpluschatter.exception.InvalidMarkException;
-import bpluschatter.exception.InvalidToDoException;
-import bpluschatter.exception.InvalidOnException;
-import bpluschatter.exception.InvalidDeleteException;
-import bpluschatter.exception.UnknownCommandException;
-
-import bpluschatter.task.Task;
-import bpluschatter.task.TaskList;
-import bpluschatter.task.ToDo;
-import bpluschatter.task.Deadline;
-import bpluschatter.task.Event;
-
-import bpluschatter.ui.Ui;
-
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
+
+import bpluschatter.exception.InvalidDeadlineException;
+import bpluschatter.exception.InvalidDeleteException;
+import bpluschatter.exception.InvalidEventException;
+import bpluschatter.exception.InvalidMarkException;
+import bpluschatter.exception.InvalidOnException;
+import bpluschatter.exception.InvalidToDoException;
+import bpluschatter.exception.UnknownCommandException;
+import bpluschatter.task.Deadline;
+import bpluschatter.task.Event;
+import bpluschatter.task.Task;
+import bpluschatter.task.TaskList;
+import bpluschatter.task.ToDo;
+import bpluschatter.ui.Ui;
 
 /**
  * Represents a parser to make sense of user commands.
@@ -175,7 +173,7 @@ public class Parser {
         int counter = 1;
         for (int i = 0; i < tasks.size(); i++) {
             if (tasks.get(i).isSameDate(dateTime)) {
-                System.out.println("\t"+ counter + "." + tasks.get(i));
+                System.out.println("\t" + counter + "." + tasks.get(i));
                 counter += 1;
             }
         }
@@ -217,28 +215,28 @@ public class Parser {
         }
         try {
             switch (command.toLowerCase()) {
-                case "list" -> tasks.list();
-                case "todo" -> {
-                    return parseToDo(details, tasks, ui);
-                }
-                case "deadline" -> {
-                    return parseDeadline(details, tasks, ui);
-                }
-                case "event" -> {
-                    return parseEvent(details, tasks, ui);
-                }
-                case "mark" -> {
-                    return parseMark(details, tasks, ui, true);
-                }
-                case "unmark" -> {
-                    return parseMark(details, tasks, ui, false);
-                }
-                case "delete" -> {
-                    return parseDelete(details, tasks, ui);
-                }
-                case "on" -> parseOn(details, tasks);
-                case "find" -> parseFind(details, tasks, ui);
-                default -> throw new UnknownCommandException();
+            case "list" -> tasks.list();
+            case "todo" -> {
+                return parseToDo(details, tasks, ui);
+            }
+            case "deadline" -> {
+                return parseDeadline(details, tasks, ui);
+            }
+            case "event" -> {
+                return parseEvent(details, tasks, ui);
+            }
+            case "mark" -> {
+                return parseMark(details, tasks, ui, true);
+            }
+            case "unmark" -> {
+                return parseMark(details, tasks, ui, false);
+            }
+            case "delete" -> {
+                return parseDelete(details, tasks, ui);
+            }
+            case "on" -> parseOn(details, tasks);
+            case "find" -> parseFind(details, tasks, ui);
+            default -> throw new UnknownCommandException();
             }
         } catch (UnknownCommandException e) {
             ui.showUnknownCommandError();
@@ -270,16 +268,17 @@ public class Parser {
         String[] taskParts = taskString.split(" \\| ");
         Task newTask = new Task(taskParts[2]);
         switch (taskParts[0]) {
-            case "T" -> newTask = new ToDo(taskParts[2]);
-            case "D" -> {
-                LocalDateTime by = LocalDateTime.parse(taskParts[3], dateTimeFormatter);
-                newTask = new Deadline(taskParts[2], by);
-            }
-            case "E" -> {
-                LocalDateTime from = LocalDateTime.parse(taskParts[3], dateTimeFormatter);
-                LocalDateTime to = LocalDateTime.parse(taskParts[4], dateTimeFormatter);
-                newTask = new Event(taskParts[2], from, to);
-            }
+        case "T" -> newTask = new ToDo(taskParts[2]);
+        case "D" -> {
+            LocalDateTime by = LocalDateTime.parse(taskParts[3], dateTimeFormatter);
+            newTask = new Deadline(taskParts[2], by);
+        }
+        case "E" -> {
+            LocalDateTime from = LocalDateTime.parse(taskParts[3], dateTimeFormatter);
+            LocalDateTime to = LocalDateTime.parse(taskParts[4], dateTimeFormatter);
+            newTask = new Event(taskParts[2], from, to);
+        }
+        default -> newTask = new Task(taskParts[2]);
         }
         if (taskParts[1].equals("1")) {
             newTask.setIsDone(true);
