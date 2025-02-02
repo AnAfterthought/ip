@@ -1,7 +1,6 @@
 package bpluschatter.ui;
 
 import java.io.IOException;
-import java.util.Scanner;
 
 import bpluschatter.command.Parser;
 import bpluschatter.storage.Storage;
@@ -26,40 +25,36 @@ public class BPlusChatter {
         try {
             tasks = new TaskList(storage.load());
         } catch (IOException e) {
-            ui.showLoadingError();
+            ui.setLoadingError();
             tasks = new TaskList();
         }
     }
 
     /**
-     * Parses user commands and returns results.
+     * Parses user commands and returns string message.
      */
-    public void run() {
+    public String run(String userInput) {
         Parser parser = new Parser();
-        Scanner userInputScanner = new Scanner(System.in);
-        ui.showWelcome();
-        while (true) {
-            String userInput = userInputScanner.nextLine();
-            if (userInput.equalsIgnoreCase("bye")) {
-                ui.showGoodbye();
-                break;
-            }
-            tasks = parser.parseCommand(userInput, tasks, ui);
-            try {
-                storage.save(tasks);
-            } catch (IOException e) {
-                ui.showSavingError();
-            }
+        if (userInput.equalsIgnoreCase("bye")) {
+            ui.setGoodbye();
+            System.exit(0);
         }
+        tasks = parser.parseCommand(userInput, tasks, ui);
+        try {
+            storage.save(tasks);
+        } catch (IOException e) {
+            ui.setSavingError();
+        }
+        return ui.toString();
     }
-
 
     /**
-     * Runs chatbot.
+     * Returns error status.
      *
-     * @param args Command line arguments if any.
+     * @return Error status.
      */
-    public static void main(String[] args) {
-        new BPlusChatter("./data/BPlusChatter.txt").run();
+    public boolean getError() {
+        return ui.getIsError();
     }
+
 }

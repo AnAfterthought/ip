@@ -7,140 +7,181 @@ import bpluschatter.task.TaskList;
  * Prints out success and error messages after each command.
  */
 public class Ui {
+    private String message;
+    private boolean isError = false;
+
     /**
-     * Prints welcome message.
+     * Sets welcome message.
      */
-    public void showWelcome() {
-        String greeting = "\tHello! I'm BPlusChatter :)\n\tWhat can I do for you?";
-        System.out.println(greeting);
+    public void setWelcome() {
+        this.message = "Hello! I'm BPlusChatter :)\nWhat can I do for you?";
+        isError = false;
     }
 
     /**
-     * Prints goodbye message.
+     * Sets goodbye message.
      */
-    public void showGoodbye() {
-        String exit = "\tBye bye. Come back soon!";
-        System.out.println(exit);
+    public void setGoodbye() {
+        this.message = "Bye bye. Come back soon!";
+        isError = false;
     }
 
     /**
-     * Prints message after addition of a task.
+     * Sets message after addition of a task.
      *
      * @param task Task that was added.
      * @param count Number of tasks after task was added.
      */
-    public void showAdd(Task task, int count) {
-        System.out.println("\tOK. I've added this task:");
-        System.out.println("\t\t" + task);
-        System.out.println("\tYou now have " + count + " task(s)");
+    public void setAdd(Task task, int count) {
+        this.message = "OK. I've added this task:\n";
+        this.message += task + "\n";
+        this.message += "You now have " + count + " task(s)";
+        isError = false;
     }
 
     /**
-     * Prints message after marking/unmarking a task.
+     * Sets message after marking/unmarking a task.
      *
      * @param task Task that was marked/unmarked.
      */
-    public void showMark(Task task) {
+    public void setMark(Task task) {
         if (task.getIsDone()) {
-            System.out.println("\tWell done! This task is done:");
+            this.message = "Well done! This task is done:\n";
         } else {
-            System.out.println("\tOk, this task is not done yet:");
+            this.message = "Ok, this task is not done yet:\n";
         }
-        System.out.println("\t\t" + task);
+        this.message += task;
+        isError = false;
     }
 
     /**
-     * Prints message after deleting a task.
+     * Sets message after deleting a task.
      *
      * @param task Task that was deleted.
      * @param count Number of tasks in list.
      */
-    public void showDelete(Task task, int count) {
-        System.out.println("\tOk. I've deleted this task:");
-        System.out.println("\t\t" + task);
-        System.out.println("\tYou now have " + count + " task(s)");
+    public void setDelete(Task task, int count) {
+        this.message = "Ok. I've deleted this task:\n";
+        this.message += task + "\n";
+        this.message += "You now have " + count + " task(s)";
+        isError = false;
     }
 
     /**
-     * Prints error message for todo command.
+     * Sets error message for todo command.
      */
-    public void showToDoError() {
-        System.out.println("\tWRONG FORMAT :(\n " + "\tFormat: todo <task>");
+    public void setToDoError() {
+        this.message = "WRONG FORMAT :(\n " + "Format: todo <task>";
+        isError = true;
     }
 
     /**
-     * Prints error message for deadline command.
+     * Sets error message for deadline command.
      */
-    public void showDeadlineError() {
-        System.out.println("\tWRONG FORMAT :(\n " + "\tFormat: deadline <task> /by <date> <time>");
+    public void setDeadlineError() {
+        this.message = "WRONG FORMAT :(\n " + "Format: deadline <task> /by <date> <time>";
+        isError = true;
     }
 
     /**
-     * Prints error message for event command.
+     * Sets error message for event command.
      */
-    public void showEventError() {
-        System.out.println("\tWRONG FORMAT :(\n " + "\tFormat: event <task> /from <date> <time> /to <date> <time>");
+    public void setEventError() {
+        this.message = "WRONG FORMAT :(\n " + "Format: event <task> /from <date> <time> /to <date> <time>";
+        isError = true;
     }
 
     /**
-     * Prints error message for on command.
+     * Sets error message for on command.
      */
-    public void showOnError() {
-        System.out.println("\tWRONG FORMAT :(\n " + "\tFormat: on yyyy-MM-dd");
+    public void setOnError() {
+        this.message = "WRONG FORMAT :(\n " + "Format: on yyyy-MM-dd";
+        isError = true;
     }
 
     /**
-     * Prints error message when loading tasks from save file.
+     * Sets error message when loading tasks from save file.
      */
-    public void showLoadingError() {
-        System.out.println("Error encountered loading tasks!");
+    public void setLoadingError() {
+        this.message = "Error encountered loading tasks!";
+        isError = true;
     }
 
     /**
-     * Prints error message when saving tasks.
+     * Sets error message when saving tasks.
      */
-    public void showSavingError() {
-        System.out.println("Error encountered saving tasks!");
+    public void setSavingError() {
+        this.message = "Error encountered saving tasks!";
+        isError = true;
     }
 
     /**
-     * Prints error message for unknown commands.
+     * Sets error message for unknown commands.
      */
-    public void showUnknownCommandError() {
-        System.out.println("\tUNKNOWN COMMAND :(\n "
-                + "\tTry starting with todo, deadline, event, mark, unmark, list, delete, on, find or bye");
+    public void setUnknownCommandError() {
+        this.message = "UNKNOWN COMMAND :(\n"
+                + "Try starting with todo, deadline, event, mark, unmark, list, delete, on, find or bye";
+        isError = true;
     }
 
     /**
-     * Prints error message if date and time format is wrong.
+     * Sets error message if date and time format is wrong.
      */
-    public void showDateTimeFormatError() {
-        System.out.println("\tWRONG FORMAT :(\n\tDate and time (24-hour) format: YYYY-MM-DD HHmm");
+    public void setDateTimeFormatError() {
+        this.message = "WRONG FORMAT :(\nDate and time (24-hour) format: YYYY-MM-DD HHmm";
+        isError = true;
     }
 
     /**
-     * Prints error message for mark/unmark command.
+     * Sets error message for mark/unmark command.
      */
-    public void showMarkError(int count) {
-        System.out.println("\tWRONG FORMAT :(\n " + "\tFormat: mark/unmark <task number>\n"
-                + "\tYou have " + count + " task(s)");
+    public void setMarkError(int count) {
+        this.message = "WRONG FORMAT :(\n " + "Format: mark/unmark <task number>\n"
+                + "You have " + count + " task(s)";
+        isError = true;
     }
 
     /**
-     * Prints error message for delete command.
+     * Sets error message for delete command.
      */
-    public void showDeleteError(int count) {
-        System.out.println("\tWRONG FORMAT :(\n\tFormat: delete <task number>\n"
-                + "\tYou have " + count + " task(s)");
+    public void setDeleteError(int count) {
+        this.message = "WRONG FORMAT :(\nFormat: delete <task number>\n"
+                + "You have " + count + " task(s)";
+        isError = true;
     }
 
     /**
-     * Prints tasks containing a keyword.
+     * Sets message to contain tasks containing a keyword.
      *
      * @param tasks List of tasks containing a keyword.
      */
-    public void showFind(TaskList tasks) {
-        System.out.println("\tHere are the tasks I found:");
-        tasks.list();
+    public void setFind(TaskList tasks) {
+        this.message = "Here are the tasks I found:\n";
+        this.message += tasks.toString();
+        isError = false;
+    }
+
+    /**
+     * Sets message to contain tasks.
+     *
+     * @param tasks List of tasks.
+     */
+    public void setList(TaskList tasks) {
+        this.message = tasks.toString();
+        isError = false;
+    }
+
+    /**
+     * Returns error status.
+     *
+     * @return Error status.
+     */
+    public boolean getIsError() {
+        return this.isError;
+    }
+
+    @Override
+    public String toString() {
+        return this.message;
     }
 }

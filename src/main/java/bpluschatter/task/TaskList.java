@@ -73,4 +73,13 @@ public class TaskList {
             System.out.println("\t" + (i + 1) + "." + tasks.get(i));
         }
     }
+
+    @Override
+    public String toString() {
+        String tasksString = "";
+        for (int i = 0; i < tasks.size(); i++) {
+            tasksString += (i + 1) + "." + tasks.get(i) + "\n";
+        }
+        return tasksString;
+    }
 }

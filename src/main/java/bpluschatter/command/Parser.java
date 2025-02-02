@@ -51,7 +51,7 @@ public class Parser {
 
         ToDo toDo = new ToDo(details);
         TaskList newTasks = tasks.add(toDo);
-        ui.showAdd(toDo, tasks.size());
+        ui.setAdd(toDo, tasks.size());
 
         return newTasks;
     }
@@ -76,7 +76,7 @@ public class Parser {
         LocalDateTime by = LocalDateTime.parse(detailParts[1], dateTimeFormatter);
         Deadline deadline = new Deadline(detailParts[0], by);
         TaskList newTasks = tasks.add(deadline);
-        ui.showAdd(deadline, tasks.size());
+        ui.setAdd(deadline, tasks.size());
 
         return newTasks;
     }
@@ -110,7 +110,7 @@ public class Parser {
         LocalDateTime to = LocalDateTime.parse(duration[1], dateTimeFormatter);
         Event event = new Event(detailParts[0], from, to);
         TaskList newTasks = tasks.add(event);
-        ui.showAdd(event, tasks.size());
+        ui.setAdd(event, tasks.size());
 
         return newTasks;
     }
@@ -129,7 +129,7 @@ public class Parser {
         try {
             int taskIndex = Integer.parseInt(details) - 1;
             tasks.get(taskIndex).setIsDone(isDone);
-            ui.showMark(tasks.get(taskIndex));
+            ui.setMark(tasks.get(taskIndex));
             return tasks;
         } catch (NumberFormatException | IndexOutOfBoundsException e) {
             throw new InvalidMarkException();
@@ -150,7 +150,7 @@ public class Parser {
             int taskIndex = Integer.parseInt(details) - 1;
             Task task = tasks.get(taskIndex);
             TaskList newTasks = tasks.remove(taskIndex);
-            ui.showDelete(task, newTasks.size());
+            ui.setDelete(task, newTasks.size());
             return newTasks;
         } catch (NumberFormatException | IndexOutOfBoundsException e) {
             throw new InvalidDeleteException();
@@ -194,7 +194,7 @@ public class Parser {
                 validTasks.add(tasks.get(i));
             }
         }
-        ui.showFind(validTasks);
+        ui.setFind(validTasks);
     }
 
     /**
@@ -215,7 +215,7 @@ public class Parser {
         }
         try {
             switch (command.toLowerCase()) {
-            case "list" -> tasks.list();
+            case "list" -> ui.setList(tasks);
             case "todo" -> {
                 return parseToDo(details, tasks, ui);
             }
@@ -239,21 +239,21 @@ public class Parser {
             default -> throw new UnknownCommandException();
             }
         } catch (UnknownCommandException e) {
-            ui.showUnknownCommandError();
+            ui.setUnknownCommandError();
         } catch (InvalidToDoException e) {
-            ui.showToDoError();
+            ui.setToDoError();
         } catch (InvalidDeadlineException e) {
-            ui.showDeadlineError();
+            ui.setDeadlineError();
         } catch (InvalidEventException e) {
-            ui.showEventError();
+            ui.setEventError();
         } catch (DateTimeParseException e) {
-            ui.showDateTimeFormatError();
+            ui.setDateTimeFormatError();
         } catch (InvalidMarkException e) {
-            ui.showMarkError(tasks.size());
+            ui.setMarkError(tasks.size());
         } catch (InvalidDeleteException e) {
-            ui.showDeleteError(tasks.size());
+            ui.setDeleteError(tasks.size());
         } catch (InvalidOnException e) {
-            ui.showOnError();
+            ui.setOnError();
         }
         return tasks;
     }
