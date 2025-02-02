@@ -2,9 +2,6 @@ package bpluschatter.command;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-import java.io.ByteArrayOutputStream;
-import java.io.PrintStream;
-
 import org.junit.jupiter.api.Test;
 
 import bpluschatter.task.TaskList;
@@ -195,18 +192,13 @@ public class ParserTest {
         Parser parser = new Parser();
         TaskList testTaskLists = new TaskList();
 
-        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-        System.setOut(new PrintStream(outputStream));
-
         testTaskLists = testTaskLists.add(new ToDo("Read book"));
         testTaskLists = testTaskLists.add(new ToDo("Eat"));
         testTaskLists = testTaskLists.add(new ToDo("Write book"));
         parser.parseCommand("find book", testTaskLists, ui);
 
-        assertEquals("\tHere are the tasks I found:\n\t1.[T][ ] Read book\n\t2.[T][ ] Write book\n",
-                outputStream.toString().replaceAll("\r\n", "\n"),
+        assertEquals("Here are the tasks I found:\n1.[T][ ] Read book\n2.[T][ ] Write book\n",
+                ui.toString(),
                 "Check that correct tasks are found");
-
-        System.setOut(System.out);
     }
 }
