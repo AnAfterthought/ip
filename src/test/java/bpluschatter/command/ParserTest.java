@@ -184,7 +184,7 @@ public class ParserTest {
     }
 
     /**
-     * Tests for successful find command.
+     * Tests for successful find command using single keyword.
      */
     @Test
     public void testParseFind() {
@@ -198,6 +198,25 @@ public class ParserTest {
         parser.parseCommand("find book", testTaskLists, ui);
 
         assertEquals("Here are the tasks I found:\n1.[T][ ] Read book\n2.[T][ ] Write book\n",
+                ui.toString(),
+                "Check that correct tasks are found");
+    }
+
+    /**
+     * Tests for successful find command using multiple keywords.
+     */
+    @Test
+    public void testParseFindMultiple() {
+        Ui ui = new Ui();
+        Parser parser = new Parser();
+        TaskList testTaskLists = new TaskList();
+
+        testTaskLists = testTaskLists.add(new ToDo("Read newspaper"));
+        testTaskLists = testTaskLists.add(new ToDo("Eat"));
+        testTaskLists = testTaskLists.add(new ToDo("Write book"));
+        parser.parseCommand("find book,read", testTaskLists, ui);
+
+        assertEquals("Here are the tasks I found:\n1.[T][ ] Read newspaper\n2.[T][ ] Write book\n",
                 ui.toString(),
                 "Check that correct tasks are found");
     }
