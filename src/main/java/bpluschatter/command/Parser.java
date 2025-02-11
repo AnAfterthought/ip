@@ -3,6 +3,8 @@ package bpluschatter.command;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
+import java.util.ArrayList;
+import java.util.Arrays;
 
 import bpluschatter.exception.InvalidDeadlineException;
 import bpluschatter.exception.InvalidDeleteException;
@@ -165,18 +167,26 @@ public class Parser {
      * @throws InvalidOnException If details is empty.
      * @throws DateTimeParseException If date format is wrong or on command is incomplete or incorrect.
      */
-    private void parseOn(String details, TaskList tasks) throws InvalidOnException, DateTimeParseException {
+    private void parseOn(String details, TaskList tasks, Ui ui) throws InvalidOnException, DateTimeParseException {
         if (details.isEmpty()) {
             throw new InvalidOnException();
         }
         LocalDateTime dateTime = LocalDateTime.parse(details + " 0000", dateTimeFormatter);
-        int counter = 1;
-        for (int i = 0; i < tasks.size(); i++) {
-            if (tasks.get(i).isSameDate(dateTime)) {
-                System.out.println("\t" + counter + "." + tasks.get(i));
-                counter += 1;
-            }
-        }
+        TaskList validTasks = new TaskList(new ArrayList<>(tasks.toStream()
+                .filter(x -> x.isSameDate(dateTime))
+                .toList()));
+        ui.setOnMessage(validTasks);
+    }
+
+    /**
+     * Returns whether a string contains any string from a given array.
+     *
+     * @param task Task object to be inspected.
+     * @param keywords Keywords to be found.
+     * @return True if string contains any keyword, false otherwise.
+     */
+    private boolean doesStringContainItemFromArray(Task task, String ... keywords) {
+        return Arrays.stream(keywords).anyMatch(task.toString().toLowerCase()::contains);
     }
 
     /**
@@ -184,18 +194,12 @@ public class Parser {
      *
      * @param tasks List of tasks currently available.
      * @param ui UI object.
-     * @param details Keywords to be found.
+     * @param keywords Keywords to be found.
      */
-    private void parseFind(TaskList tasks, Ui ui, String ... details) {
-        TaskList validTasks = new TaskList();
-        for (int i = 0; i < tasks.size(); i++) {
-            for (int j = 0; j < details.length; j++) {
-                String taskDescription = tasks.get(i).toString().toLowerCase();
-                if (taskDescription.contains(details[j].toLowerCase())) {
-                    validTasks.add(tasks.get(i));
-                }
-            }
-        }
+    private void parseFind(TaskList tasks, Ui ui, String ... keywords) {
+        TaskList validTasks = new TaskList(new ArrayList<>(tasks.toStream()
+                .filter(x -> doesStringContainItemFromArray(x, keywords))
+                .toList()));
         ui.setFind(validTasks);
     }
 
@@ -236,7 +240,7 @@ public class Parser {
             case "delete" -> {
                 return parseDelete(details, tasks, ui);
             }
-            case "on" -> parseOn(details, tasks);
+            case "on" -> parseOn(details, tasks, ui);
             case "find" -> parseFind(tasks, ui, details.split(","));
             default -> throw new UnknownCommandException();
             }

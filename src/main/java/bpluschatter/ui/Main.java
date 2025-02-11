@@ -23,7 +23,7 @@ public class Main extends Application {
             Scene scene = new Scene(ap);
             stage.setScene(scene);
             stage.setTitle("BPlusChatter");
-            fxmlLoader.<MainWindow>getController().setBPlusChatter(bPlusChatter);  // inject the BPlusChatter instance
+            fxmlLoader.<MainWindow>getController().setBPlusChatter(bPlusChatter); // inject the BPlusChatter instance
             stage.show();
         } catch (IOException e) {
             e.printStackTrace();
