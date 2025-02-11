@@ -47,6 +47,7 @@ public class Parser {
      * @throws InvalidToDoException If details is empty.
      */
     private TaskList parseToDo(String details, TaskList tasks, Ui ui) throws InvalidToDoException {
+        assert ui != null : "There should be a UI object.";
         if (details.isEmpty()) {
             throw new InvalidToDoException();
         }
@@ -55,6 +56,7 @@ public class Parser {
         TaskList newTasks = tasks.add(toDo);
         ui.setAdd(toDo, tasks.size());
 
+        assert newTasks != null : "Tasklist object should not be empty";
         return newTasks;
     }
 
@@ -70,6 +72,7 @@ public class Parser {
      */
     private TaskList parseDeadline(String details, TaskList tasks, Ui ui) throws DateTimeParseException,
             InvalidDeadlineException {
+        assert ui != null : "There should be a UI object.";
         String[] detailParts = details.split(" /by ", 2);
         if (detailParts.length != 2) {
             throw new InvalidDeadlineException();
@@ -79,6 +82,8 @@ public class Parser {
         Deadline deadline = new Deadline(detailParts[0], by);
         TaskList newTasks = tasks.add(deadline);
         ui.setAdd(deadline, tasks.size());
+
+        assert newTasks != null : "Tasklist object should not be empty";
 
         return newTasks;
     }
@@ -95,6 +100,7 @@ public class Parser {
      */
     private TaskList parseEvent(String details, TaskList tasks, Ui ui) throws DateTimeParseException,
             InvalidEventException {
+        assert ui != null : "There should be a UI object.";
         if (details.isEmpty()) {
             throw new InvalidEventException();
         }
@@ -114,6 +120,8 @@ public class Parser {
         TaskList newTasks = tasks.add(event);
         ui.setAdd(event, tasks.size());
 
+        assert newTasks != null : "Tasklist object should not be empty";
+
         return newTasks;
     }
 
@@ -128,6 +136,7 @@ public class Parser {
      * @throws InvalidMarkException If index is not a number or index larger than number of tasks.
      */
     private TaskList parseMark(String details, TaskList tasks, Ui ui, boolean isDone) throws InvalidMarkException {
+        assert ui != null : "There should be a UI object.";
         try {
             int taskIndex = Integer.parseInt(details) - 1;
             tasks.get(taskIndex).setIsDone(isDone);
@@ -148,6 +157,7 @@ public class Parser {
      * @throws InvalidDeleteException If index is not a number or index larger than number of tasks.
      */
     private TaskList parseDelete(String details, TaskList tasks, Ui ui) throws InvalidDeleteException {
+        assert ui != null : "There should be a UI object.";
         try {
             int taskIndex = Integer.parseInt(details) - 1;
             Task task = tasks.get(taskIndex);
@@ -197,6 +207,7 @@ public class Parser {
      * @param keywords Keywords to be found.
      */
     private void parseFind(TaskList tasks, Ui ui, String ... keywords) {
+        assert ui != null : "There should be a UI object.";
         TaskList validTasks = new TaskList(new ArrayList<>(tasks.toStream()
                 .filter(x -> doesStringContainItemFromArray(x, keywords))
                 .toList()));
@@ -240,10 +251,17 @@ public class Parser {
             case "delete" -> {
                 return parseDelete(details, tasks, ui);
             }
-            case "on" -> parseOn(details, tasks, ui);
-            case "find" -> parseFind(tasks, ui, details.split(","));
+            case "on" -> {
+                parseOn(details, tasks, ui);
+                return tasks;
+            }
+            case "find" -> {
+                parseFind(tasks, ui, details.split(","));
+                return tasks;
+            }
             default -> throw new UnknownCommandException();
             }
+            assert false : "Code should not reach here.";
         } catch (UnknownCommandException e) {
             ui.setUnknownCommandError();
         } catch (InvalidToDoException e) {

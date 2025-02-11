@@ -5,3 +5,4 @@ T | 1 | exercse]
 T | 1 | exercise
 T | 1 | read
 D | 0 | shop | 2025-02-02 1200
+T | 0 | clean room
