@@ -20,7 +20,7 @@ public class TaskListTest {
         tasksTwo.add(new ToDo("Eat"));
         testTaskList = testTaskList.add(new ToDo("Eat"));
 
-        assertEquals(2, testTaskList.size(), "Check that size is correct after adding task");
+        assertEquals(2, testTaskList.getSize(), "Check that size is correct after adding task");
         assertEquals(new TaskList(tasksTwo).get(0).toString(), testTaskList.get(0).toString(),
                 "Check that TaskList is correct after adding task");
         assertEquals(new TaskList(tasksTwo).get(1).toString(), testTaskList.get(1).toString(),
@@ -38,7 +38,7 @@ public class TaskListTest {
         ArrayList<Task> tasks = new ArrayList<>();
         tasks.add(new ToDo("Eat"));
 
-        assertEquals(1, testTaskList.size(), "Check that size is correct after deleting task");
+        assertEquals(1, testTaskList.getSize(), "Check that size is correct after deleting task");
         assertEquals(new TaskList(tasks).get(0).toString(), testTaskList.get(0).toString(),
                 "Check that TaskList is correct after deleting task");
     }

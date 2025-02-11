@@ -29,11 +29,7 @@ public class Deadline extends Task {
     @Override
     public String toFileFormat() {
         String task = "D |";
-        if (this.isDone) {
-            task += " 1 | ";
-        } else {
-            task += " 0 | ";
-        }
+        task += isDone ? " 1 | " : " 0 | ";
         return task + this.description + " | " + this.by.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HHmm"));
     }
 

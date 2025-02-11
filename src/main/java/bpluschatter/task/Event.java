@@ -32,11 +32,7 @@ public class Event extends Task {
     @Override
     public String toFileFormat() {
         String task = "E |";
-        if (this.isDone) {
-            task += " 1 | ";
-        } else {
-            task += " 0 | ";
-        }
+        task += isDone ? " 1 | " : " 0 | ";
         return task + this.description + " | "
                 + this.from.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HHmm")) + " | "
                 + this.to.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HHmm"));

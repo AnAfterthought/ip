@@ -16,11 +16,7 @@ public class ToDo extends Task {
     @Override
     public String toFileFormat() {
         String task = "T |";
-        if (isDone) {
-            task += " 1 | ";
-        } else {
-            task += " 0 | ";
-        }
+        task += isDone ? " 1 | " : " 0 | ";
         return task + description;
     }
 

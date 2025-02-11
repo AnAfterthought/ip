@@ -11,17 +11,9 @@ public class Ui {
     private boolean isError = false;
 
     /**
-     * Sets welcome message.
-     */
-    public void setWelcome() {
-        this.message = "Hello! I'm BPlusChatter :)\nWhat can I do for you?";
-        isError = false;
-    }
-
-    /**
      * Sets goodbye message.
      */
-    public void setGoodbye() {
+    public void setGoodbyeMessage() {
         this.message = "Bye bye. Come back soon!";
         isError = false;
     }
@@ -32,7 +24,7 @@ public class Ui {
      * @param task Task that was added.
      * @param count Number of tasks after task was added.
      */
-    public void setAdd(Task task, int count) {
+    public void setAddMessage(Task task, int count) {
         this.message = "OK. I've added this task:\n";
         this.message += task + "\n";
         this.message += "You now have " + count + " task(s)";
@@ -44,12 +36,9 @@ public class Ui {
      *
      * @param task Task that was marked/unmarked.
      */
-    public void setMark(Task task) {
-        if (task.getIsDone()) {
-            this.message = "Well done! This task is done:\n";
-        } else {
-            this.message = "Ok, this task is not done yet:\n";
-        }
+    public void setMarkMessage(Task task) {
+        this.message += task.getIsDone() ? "Well done! This task is done:\n"
+                : "Ok, this task is not done yet:\n";
         this.message += task;
         isError = false;
     }
@@ -60,7 +49,7 @@ public class Ui {
      * @param task Task that was deleted.
      * @param count Number of tasks in list.
      */
-    public void setDelete(Task task, int count) {
+    public void setDeleteMessage(Task task, int count) {
         this.message = "Ok. I've deleted this task:\n";
         this.message += task + "\n";
         this.message += "You now have " + count + " task(s)";
@@ -166,7 +155,7 @@ public class Ui {
      *
      * @param tasks List of tasks containing a keyword.
      */
-    public void setFind(TaskList tasks) {
+    public void setFindMessage(TaskList tasks) {
         this.message = "Here are the tasks I found:\n";
         this.message += tasks.toString();
         isError = false;

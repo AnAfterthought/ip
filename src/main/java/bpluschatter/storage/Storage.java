@@ -26,6 +26,22 @@ public class Storage {
     public Storage(String filePath) {
         this.filePath = filePath;
         this.parser = new Parser();
+        createFile();
+    }
+
+    /**
+     * Creates file if it does not exist
+     */
+    private void createFile() {
+        File file = new File(filePath);
+        try {
+            if (!file.exists()) {
+                file.getParentFile().mkdirs();
+                file.createNewFile();
+            }
+        } catch (IOException e) {
+            System.out.println("Error creating file");
+        }
     }
 
     /**
@@ -37,14 +53,9 @@ public class Storage {
     public ArrayList<Task> load() throws IOException {
         File file = new File(filePath);
         ArrayList<Task> tasks = new ArrayList<>();
-        if (!file.exists()) {
-            file.getParentFile().mkdirs();
-            file.createNewFile();
-        } else {
-            Scanner scanner = new Scanner(file);
-            while (scanner.hasNext()) {
-                tasks.add(parser.parseFromFile(scanner.nextLine()));
-            }
+        Scanner scanner = new Scanner(file);
+        while (scanner.hasNext()) {
+            tasks.add(parser.parseFromFile(scanner.nextLine()));
         }
         return tasks;
     }
@@ -57,7 +68,7 @@ public class Storage {
      */
     public void save(TaskList tasks) throws IOException {
         FileWriter fileWriter = new FileWriter(filePath);
-        for (int i = 0; i < tasks.size(); i++) {
+        for (int i = 0; i < tasks.getSize(); i++) {
             fileWriter.write(tasks.get(i).toFileFormat() + System.lineSeparator());
         }
         fileWriter.close();

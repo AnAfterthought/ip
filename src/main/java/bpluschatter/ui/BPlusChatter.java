@@ -36,7 +36,7 @@ public class BPlusChatter {
     public String run(String userInput) {
         Parser parser = new Parser();
         if (userInput.equalsIgnoreCase("bye")) {
-            ui.setGoodbye();
+            ui.setGoodbyeMessage();
             System.exit(0);
         }
         tasks = parser.parseCommand(userInput, tasks, ui);
