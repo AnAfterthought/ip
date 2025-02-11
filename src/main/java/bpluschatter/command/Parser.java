@@ -51,7 +51,7 @@ public class Parser {
 
         ToDo toDo = new ToDo(details);
         TaskList newTasks = tasks.add(toDo);
-        ui.setAdd(toDo, tasks.size());
+        ui.setAddMessage(toDo, tasks.getSize());
 
         return newTasks;
     }
@@ -68,7 +68,9 @@ public class Parser {
      */
     private TaskList parseDeadline(String details, TaskList tasks, Ui ui) throws DateTimeParseException,
             InvalidDeadlineException {
+
         String[] detailParts = details.split(" /by ", 2);
+
         if (detailParts.length != 2) {
             throw new InvalidDeadlineException();
         }
@@ -76,7 +78,7 @@ public class Parser {
         LocalDateTime by = LocalDateTime.parse(detailParts[1], dateTimeFormatter);
         Deadline deadline = new Deadline(detailParts[0], by);
         TaskList newTasks = tasks.add(deadline);
-        ui.setAdd(deadline, tasks.size());
+        ui.setAddMessage(deadline, tasks.getSize());
 
         return newTasks;
     }
@@ -93,6 +95,7 @@ public class Parser {
      */
     private TaskList parseEvent(String details, TaskList tasks, Ui ui) throws DateTimeParseException,
             InvalidEventException {
+
         if (details.isEmpty()) {
             throw new InvalidEventException();
         }
@@ -110,7 +113,7 @@ public class Parser {
         LocalDateTime to = LocalDateTime.parse(duration[1], dateTimeFormatter);
         Event event = new Event(detailParts[0], from, to);
         TaskList newTasks = tasks.add(event);
-        ui.setAdd(event, tasks.size());
+        ui.setAddMessage(event, tasks.getSize());
 
         return newTasks;
     }
@@ -129,9 +132,11 @@ public class Parser {
         try {
             int taskIndex = Integer.parseInt(details) - 1;
             tasks.get(taskIndex).setIsDone(isDone);
-            ui.setMark(tasks.get(taskIndex));
+            ui.setMarkMessage(tasks.get(taskIndex));
             return tasks;
-        } catch (NumberFormatException | IndexOutOfBoundsException e) {
+        } catch (NumberFormatException e) {
+            throw new InvalidMarkException();
+        } catch (IndexOutOfBoundsException e) {
             throw new InvalidMarkException();
         }
     }
@@ -150,9 +155,11 @@ public class Parser {
             int taskIndex = Integer.parseInt(details) - 1;
             Task task = tasks.get(taskIndex);
             TaskList newTasks = tasks.remove(taskIndex);
-            ui.setDelete(task, newTasks.size());
+            ui.setDeleteMessage(task, newTasks.getSize());
             return newTasks;
-        } catch (NumberFormatException | IndexOutOfBoundsException e) {
+        } catch (NumberFormatException e) {
+            throw new InvalidDeleteException();
+        } catch (IndexOutOfBoundsException e) {
             throw new InvalidDeleteException();
         }
     }
@@ -171,7 +178,7 @@ public class Parser {
         }
         LocalDateTime dateTime = LocalDateTime.parse(details + " 0000", dateTimeFormatter);
         int counter = 1;
-        for (int i = 0; i < tasks.size(); i++) {
+        for (int i = 0; i < tasks.getSize(); i++) {
             if (tasks.get(i).isSameDate(dateTime)) {
                 System.out.println("\t" + counter + "." + tasks.get(i));
                 counter += 1;
@@ -187,8 +194,9 @@ public class Parser {
      * @param details Keywords to be found.
      */
     private void parseFind(TaskList tasks, Ui ui, String ... details) {
+        assert ui != null : "There should be a UI object.";
         TaskList validTasks = new TaskList();
-        for (int i = 0; i < tasks.size(); i++) {
+        for (int i = 0; i < tasks.getSize(); i++) {
             for (int j = 0; j < details.length; j++) {
                 String taskDescription = tasks.get(i).toString().toLowerCase();
                 if (taskDescription.contains(details[j].toLowerCase())) {
@@ -196,7 +204,7 @@ public class Parser {
                 }
             }
         }
-        ui.setFind(validTasks);
+        ui.setFindMessage(validTasks);
     }
 
     /**
@@ -251,9 +259,9 @@ public class Parser {
         } catch (DateTimeParseException e) {
             ui.setDateTimeFormatError();
         } catch (InvalidMarkException e) {
-            ui.setMarkError(tasks.size());
+            ui.setMarkError(tasks.getSize());
         } catch (InvalidDeleteException e) {
-            ui.setDeleteError(tasks.size());
+            ui.setDeleteError(tasks.getSize());
         } catch (InvalidOnException e) {
             ui.setOnError();
         }
@@ -280,7 +288,9 @@ public class Parser {
             LocalDateTime to = LocalDateTime.parse(taskParts[4], dateTimeFormatter);
             newTask = new Event(taskParts[2], from, to);
         }
-        default -> newTask = new Task(taskParts[2]);
+        default -> {
+            assert false : "Code should not reach here.";
+        }
         }
         if (taskParts[1].equals("1")) {
             newTask.setIsDone(true);

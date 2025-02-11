@@ -20,7 +20,7 @@ public class ParserTest {
 
         testTaskLists = parser.parseCommand("todo read", testTaskLists, ui);
 
-        assertEquals(1, testTaskLists.size(), "Check size is correct after command");
+        assertEquals(1, testTaskLists.getSize(), "Check size is correct after command");
         assertEquals("[T][ ] read", testTaskLists.get(0).toString(),
                 "Check task list is correct after command");
     }
@@ -37,7 +37,7 @@ public class ParserTest {
         testTaskLists = parser.parseCommand("todo", testTaskLists, ui);
         testTaskLists.list();
 
-        assertEquals(0, testTaskLists.size(), "Check size is correct after error");
+        assertEquals(0, testTaskLists.getSize(), "Check size is correct after error");
     }
 
     /**
@@ -51,7 +51,7 @@ public class ParserTest {
 
         testTaskLists = parser.parseCommand("deadline read /by 2020-01-01 1600", testTaskLists, ui);
 
-        assertEquals(1, testTaskLists.size(), "Check size is correct after command");
+        assertEquals(1, testTaskLists.getSize(), "Check size is correct after command");
         assertEquals("[D][ ] read (by: Jan 1 2020 04:00 pm)", testTaskLists.get(0).toString(),
                 "Check task list is correct after command");
     }
@@ -68,7 +68,7 @@ public class ParserTest {
         testTaskLists = parser.parseCommand("deadline read /by 2020-01-01", testTaskLists, ui);
         testTaskLists = parser.parseCommand("deadline read", testTaskLists, ui);
 
-        assertEquals(0, testTaskLists.size(), "Check size is correct after error");
+        assertEquals(0, testTaskLists.getSize(), "Check size is correct after error");
     }
 
     /**
@@ -83,7 +83,7 @@ public class ParserTest {
         testTaskLists = parser.parseCommand("event read /from 2020-01-01 1600 /to 2020-01-01 1800",
                 testTaskLists, ui);
 
-        assertEquals(1, testTaskLists.size(), "Check size is correct after command");
+        assertEquals(1, testTaskLists.getSize(), "Check size is correct after command");
         assertEquals("[E][ ] read (from: Jan 1 2020 04:00 pm to: Jan 1 2020 06:00 pm)",
                 testTaskLists.get(0).toString(), "Check task list is correct after command");
     }
@@ -102,7 +102,7 @@ public class ParserTest {
         testTaskLists = parser.parseCommand("event read /from 2020-01-01 /to 2020-01-1 1800",
                 testTaskLists, ui);
 
-        assertEquals(0, testTaskLists.size(), "Check size is correct after error");
+        assertEquals(0, testTaskLists.getSize(), "Check size is correct after error");
     }
 
     /**
@@ -119,7 +119,7 @@ public class ParserTest {
         testTaskLists = parser.parseCommand("todo exercise", testTaskLists, ui);
         testTaskLists = parser.parseCommand("delete 2", testTaskLists, ui);
 
-        assertEquals(2, testTaskLists.size(), "Check size is correct after delete");
+        assertEquals(2, testTaskLists.getSize(), "Check size is correct after delete");
         assertEquals("[T][ ] read", testTaskLists.get(0).toString(),
                 "Check tasks are correct after delete");
         assertEquals("[T][ ] exercise", testTaskLists.get(1).toString(),
@@ -138,7 +138,7 @@ public class ParserTest {
         testTaskLists = parser.parseCommand("todo read", testTaskLists, ui);
         testTaskLists = parser.parseCommand("delete 2", testTaskLists, ui);
 
-        assertEquals(1, testTaskLists.size(), "Check size is correct after error");
+        assertEquals(1, testTaskLists.getSize(), "Check size is correct after error");
         assertEquals("[T][ ] read", testTaskLists.get(0).toString(),
                 "Check tasks are correct after error");
     }

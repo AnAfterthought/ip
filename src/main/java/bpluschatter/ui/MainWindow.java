@@ -26,6 +26,9 @@ public class MainWindow extends AnchorPane {
     private Image userImage = new Image(this.getClass().getResourceAsStream("/images/User.png"));
     private Image bPlusChatterImage = new Image(this.getClass().getResourceAsStream("/images/BPlusChatter.png"));
 
+    /**
+     * Sets initial values for GUI.
+     */
     @FXML
     public void initialize() {
         scrollPane.vvalueProperty().bind(dialogContainer.heightProperty());
@@ -34,7 +37,9 @@ public class MainWindow extends AnchorPane {
                 bPlusChatterImage, false));
     }
 
-    /** Injects the BPlusChatter instance */
+    /**
+     * Injects the BPlusChatter instance.
+     */
     public void setBPlusChatter(BPlusChatter bPlusChatter) {
         this.bPlusChatter = bPlusChatter;
     }

@@ -1,6 +1,7 @@
-T | 0 | read book
-D | 1 | read book | 2020-01-01 1600
+T | 1 | read book
+D | 0 | read book | 2020-01-01 1600
 E | 0 | read book | 2020-01-01 1200 | 2020-01-01 1500
 T | 1 | exercse]
 T | 1 | exercise
 T | 1 | read
+D | 0 | shopping | 2025-02-02 1200
