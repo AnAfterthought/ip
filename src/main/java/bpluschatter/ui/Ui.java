@@ -140,6 +140,17 @@ public class Ui {
     }
 
     /**
+     * Sets message to contain tasks happening on specified date.
+     *
+     * @param tasks List of tasks happening on specified date.
+     */
+    public void setOnMessage(TaskList tasks) {
+        this.message = "These tasks occur on the chosen date:\n";
+        this.message += tasks.toString();
+        isError = false;
+    }
+
+    /**
      * Sets message to contain tasks containing a keyword.
      *
      * @param tasks List of tasks containing a keyword.

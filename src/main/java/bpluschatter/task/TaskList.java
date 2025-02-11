@@ -1,6 +1,7 @@
 package bpluschatter.task;
 
 import java.util.ArrayList;
+import java.util.stream.Stream;
 
 /**
  * Represents a list of tasks.
@@ -72,6 +73,15 @@ public class TaskList {
         for (int i = 0; i < tasks.size(); i++) {
             System.out.println("\t" + (i + 1) + "." + tasks.get(i));
         }
+    }
+
+    /**
+     * Returns stream of Task objects.
+     *
+     * @return Stream of Task objects.
+     */
+    public Stream<Task> toStream() {
+        return tasks.stream();
     }
 
     @Override

@@ -3,6 +3,8 @@ package bpluschatter.command;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
+import java.util.ArrayList;
+import java.util.Arrays;
 
 import bpluschatter.exception.InvalidDeadlineException;
 import bpluschatter.exception.InvalidDeleteException;
@@ -45,6 +47,7 @@ public class Parser {
      * @throws InvalidToDoException If details is empty.
      */
     private TaskList parseToDo(String details, TaskList tasks, Ui ui) throws InvalidToDoException {
+        assert ui != null : "There should be a UI object.";
         if (details.isEmpty()) {
             throw new InvalidToDoException();
         }
@@ -53,6 +56,7 @@ public class Parser {
         TaskList newTasks = tasks.add(toDo);
         ui.setAddMessage(toDo, tasks.getSize());
 
+        assert newTasks != null : "Tasklist object should not be empty";
         return newTasks;
     }
 
@@ -69,6 +73,7 @@ public class Parser {
     private TaskList parseDeadline(String details, TaskList tasks, Ui ui) throws DateTimeParseException,
             InvalidDeadlineException {
 
+        assert ui != null : "There should be a UI object.";
         String[] detailParts = details.split(" /by ", 2);
 
         if (detailParts.length != 2) {
@@ -79,6 +84,8 @@ public class Parser {
         Deadline deadline = new Deadline(detailParts[0], by);
         TaskList newTasks = tasks.add(deadline);
         ui.setAddMessage(deadline, tasks.getSize());
+
+        assert newTasks != null : "Tasklist object should not be empty";
 
         return newTasks;
     }
@@ -95,6 +102,7 @@ public class Parser {
      */
     private TaskList parseEvent(String details, TaskList tasks, Ui ui) throws DateTimeParseException,
             InvalidEventException {
+        assert ui != null : "There should be a UI object.";
 
         if (details.isEmpty()) {
             throw new InvalidEventException();
@@ -115,6 +123,8 @@ public class Parser {
         TaskList newTasks = tasks.add(event);
         ui.setAddMessage(event, tasks.getSize());
 
+        assert newTasks != null : "Tasklist object should not be empty";
+
         return newTasks;
     }
 
@@ -129,6 +139,7 @@ public class Parser {
      * @throws InvalidMarkException If index is not a number or index larger than number of tasks.
      */
     private TaskList parseMark(String details, TaskList tasks, Ui ui, boolean isDone) throws InvalidMarkException {
+        assert ui != null : "There should be a UI object.";
         try {
             int taskIndex = Integer.parseInt(details) - 1;
             tasks.get(taskIndex).setIsDone(isDone);
@@ -151,6 +162,7 @@ public class Parser {
      * @throws InvalidDeleteException If index is not a number or index larger than number of tasks.
      */
     private TaskList parseDelete(String details, TaskList tasks, Ui ui) throws InvalidDeleteException {
+        assert ui != null : "There should be a UI object.";
         try {
             int taskIndex = Integer.parseInt(details) - 1;
             Task task = tasks.get(taskIndex);
@@ -172,18 +184,26 @@ public class Parser {
      * @throws InvalidOnException If details is empty.
      * @throws DateTimeParseException If date format is wrong or on command is incomplete or incorrect.
      */
-    private void parseOn(String details, TaskList tasks) throws InvalidOnException, DateTimeParseException {
+    private void parseOn(String details, TaskList tasks, Ui ui) throws InvalidOnException, DateTimeParseException {
         if (details.isEmpty()) {
             throw new InvalidOnException();
         }
         LocalDateTime dateTime = LocalDateTime.parse(details + " 0000", dateTimeFormatter);
-        int counter = 1;
-        for (int i = 0; i < tasks.getSize(); i++) {
-            if (tasks.get(i).isSameDate(dateTime)) {
-                System.out.println("\t" + counter + "." + tasks.get(i));
-                counter += 1;
-            }
-        }
+        TaskList validTasks = new TaskList(new ArrayList<>(tasks.toStream()
+                .filter(x -> x.isSameDate(dateTime))
+                .toList()));
+        ui.setOnMessage(validTasks);
+    }
+
+    /**
+     * Returns whether a string contains any string from a given array.
+     *
+     * @param task Task object to be inspected.
+     * @param keywords Keywords to be found.
+     * @return True if string contains any keyword, false otherwise.
+     */
+    private boolean doesStringContainItemFromArray(Task task, String ... keywords) {
+        return Arrays.stream(keywords).anyMatch(task.toString().toLowerCase()::contains);
     }
 
     /**
@@ -191,19 +211,13 @@ public class Parser {
      *
      * @param tasks List of tasks currently available.
      * @param ui UI object.
-     * @param details Keywords to be found.
+     * @param keywords Keywords to be found.
      */
-    private void parseFind(TaskList tasks, Ui ui, String ... details) {
+    private void parseFind(TaskList tasks, Ui ui, String ... keywords) {
         assert ui != null : "There should be a UI object.";
-        TaskList validTasks = new TaskList();
-        for (int i = 0; i < tasks.getSize(); i++) {
-            for (int j = 0; j < details.length; j++) {
-                String taskDescription = tasks.get(i).toString().toLowerCase();
-                if (taskDescription.contains(details[j].toLowerCase())) {
-                    validTasks.add(tasks.get(i));
-                }
-            }
-        }
+        TaskList validTasks = new TaskList(new ArrayList<>(tasks.toStream()
+                .filter(x -> doesStringContainItemFromArray(x, keywords))
+                .toList()));
         ui.setFindMessage(validTasks);
     }
 
@@ -225,7 +239,10 @@ public class Parser {
         }
         try {
             switch (command.toLowerCase()) {
-            case "list" -> ui.setList(tasks);
+            case "list" -> {
+                ui.setList(tasks);
+                return tasks;
+            }
             case "todo" -> {
                 return parseToDo(details, tasks, ui);
             }
@@ -244,8 +261,14 @@ public class Parser {
             case "delete" -> {
                 return parseDelete(details, tasks, ui);
             }
-            case "on" -> parseOn(details, tasks);
-            case "find" -> parseFind(tasks, ui, details.split(","));
+            case "on" -> {
+                parseOn(details, tasks, ui);
+                return tasks;
+            }
+            case "find" -> {
+                parseFind(tasks, ui, details.split(","));
+                return tasks;
+            }
             default -> throw new UnknownCommandException();
             }
         } catch (UnknownCommandException e) {
