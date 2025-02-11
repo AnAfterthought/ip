@@ -232,7 +232,10 @@ public class Parser {
         }
         try {
             switch (command.toLowerCase()) {
-            case "list" -> ui.setList(tasks);
+            case "list" -> {
+                ui.setList(tasks);
+                return tasks;
+            }
             case "todo" -> {
                 return parseToDo(details, tasks, ui);
             }
@@ -261,7 +264,6 @@ public class Parser {
             }
             default -> throw new UnknownCommandException();
             }
-            assert false : "Code should not reach here.";
         } catch (UnknownCommandException e) {
             ui.setUnknownCommandError();
         } catch (InvalidToDoException e) {
