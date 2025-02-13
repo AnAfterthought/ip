@@ -37,7 +37,7 @@ public class Ui {
      * @param task Task that was marked/unmarked.
      */
     public void setMarkMessage(Task task) {
-        this.message += task.getIsDone() ? "Well done! This task is done:\n"
+        this.message = task.getIsDone() ? "Well done! This task is done:\n"
                 : "Ok, this task is not done yet:\n";
         this.message += task;
         isError = false;
@@ -60,7 +60,7 @@ public class Ui {
      * Sets error message for todo command.
      */
     public void setToDoError() {
-        this.message = "WRONG FORMAT :(\n " + "Format: todo <task>";
+        this.message = "WRONG FORMAT :(\n" + "Format: todo <task> <priority>";
         isError = true;
     }
 
@@ -68,7 +68,7 @@ public class Ui {
      * Sets error message for deadline command.
      */
     public void setDeadlineError() {
-        this.message = "WRONG FORMAT :(\n " + "Format: deadline <task> /by <date> <time>";
+        this.message = "WRONG FORMAT :(\n" + "Format: deadline <task> /by <date> <time> <priority>";
         isError = true;
     }
 
@@ -76,7 +76,7 @@ public class Ui {
      * Sets error message for event command.
      */
     public void setEventError() {
-        this.message = "WRONG FORMAT :(\n " + "Format: event <task> /from <date> <time> /to <date> <time>";
+        this.message = "WRONG FORMAT :(\n" + "Format: event <task> /from <date> <time> /to <date> <time> <priority>";
         isError = true;
     }
 
@@ -84,7 +84,7 @@ public class Ui {
      * Sets error message for on command.
      */
     public void setOnError() {
-        this.message = "WRONG FORMAT :(\n " + "Format: on yyyy-MM-dd";
+        this.message = "WRONG FORMAT :(\n" + "Format: on yyyy-MM-dd";
         isError = true;
     }
 
@@ -125,7 +125,7 @@ public class Ui {
      * Sets error message for mark/unmark command.
      */
     public void setMarkError(int count) {
-        this.message = "WRONG FORMAT :(\n " + "Format: mark/unmark <task number>\n"
+        this.message = "WRONG FORMAT :(\n" + "Format: mark/unmark <task number>\n"
                 + "You have " + count + " task(s)";
         isError = true;
     }
@@ -169,6 +169,14 @@ public class Ui {
     public void setList(TaskList tasks) {
         this.message = tasks.toString();
         isError = false;
+    }
+
+    /**
+     * Sets error message if invalid priority is encountered.
+     */
+    public void setPriorityError() {
+        this.message = "WRONG PRIORITY :(\nThe priority levels are HIGH, MEDIUM or LOW\n";
+        isError = true;
     }
 
     /**

@@ -2,11 +2,14 @@ package bpluschatter.task;
 
 import java.time.LocalDateTime;
 
+import bpluschatter.enumerations.Priority;
+
 /**
  * Represents a task.
  */
-public class Task {
+public class Task implements Comparable<Task> {
     protected String description;
+    protected Priority priority;
     protected boolean isDone;
 
     /**
@@ -14,8 +17,9 @@ public class Task {
      *
      * @param description Details of task.
      */
-    public Task(String description) {
+    public Task(String description, Priority priority) {
         this.description = description;
+        this.priority = priority;
         this.isDone = false;
     }
 
@@ -65,12 +69,23 @@ public class Task {
         return false;
     }
 
+    @Override
+    public int compareTo(Task task) {
+        if (this.priority.ordinal() < task.priority.ordinal()) {
+            return -1;
+        } else if (this.priority.ordinal() > task.priority.ordinal()) {
+            return 1;
+        } else {
+            return 0;
+        }
+    }
+
     /**
      * Returns details of task.
      *
      * @return Details of task.
      */
     public String toString() {
-        return "[" + getStatusIcon() + "] " + this.description;
+        return "[" + getStatusIcon() + "] " + this.description + " <" + this.priority.toString() + ">";
     }
 }

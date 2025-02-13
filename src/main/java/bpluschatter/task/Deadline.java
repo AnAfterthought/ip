@@ -3,6 +3,8 @@ package bpluschatter.task;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
+import bpluschatter.enumerations.Priority;
+
 /**
  * Represents a deadline task
  */
@@ -16,8 +18,8 @@ public class Deadline extends Task {
      * @param description Details of task.
      * @param by Date and time to complete task by.
      */
-    public Deadline(String description, LocalDateTime by) {
-        super(description);
+    public Deadline(String description, Priority priority, LocalDateTime by) {
+        super(description, priority);
         this.by = by;
     }
 
@@ -30,7 +32,8 @@ public class Deadline extends Task {
     public String toFileFormat() {
         String task = "D |";
         task += isDone ? " 1 | " : " 0 | ";
-        return task + this.description + " | " + this.by.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HHmm"));
+        return task + this.description + " | " + this.by.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HHmm"))
+                + " | " + this.priority.toString();
     }
 
     /**
