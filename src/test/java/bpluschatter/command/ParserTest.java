@@ -4,6 +4,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import org.junit.jupiter.api.Test;
 
+import bpluschatter.enumerations.Priority;
 import bpluschatter.task.TaskList;
 import bpluschatter.task.ToDo;
 import bpluschatter.ui.Ui;
@@ -18,10 +19,10 @@ public class ParserTest {
         Parser parser = new Parser();
         TaskList testTaskLists = new TaskList();
 
-        testTaskLists = parser.parseCommand("todo read", testTaskLists, ui);
+        testTaskLists = parser.parseCommand("todo read medium", testTaskLists, ui);
 
         assertEquals(1, testTaskLists.getSize(), "Check size is correct after command");
-        assertEquals("[T][ ] read", testTaskLists.get(0).toString(),
+        assertEquals("[T][ ] read <MEDIUM>", testTaskLists.get(0).toString(),
                 "Check task list is correct after command");
     }
 
@@ -49,10 +50,10 @@ public class ParserTest {
         Parser parser = new Parser();
         TaskList testTaskLists = new TaskList();
 
-        testTaskLists = parser.parseCommand("deadline read /by 2020-01-01 1600", testTaskLists, ui);
+        testTaskLists = parser.parseCommand("deadline read /by 2020-01-01 1600 LOW", testTaskLists, ui);
 
         assertEquals(1, testTaskLists.getSize(), "Check size is correct after command");
-        assertEquals("[D][ ] read (by: Jan 1 2020 04:00 pm)", testTaskLists.get(0).toString(),
+        assertEquals("[D][ ] read <LOW> (by: Jan 1 2020 04:00 pm)", testTaskLists.get(0).toString(),
                 "Check task list is correct after command");
     }
 
@@ -65,8 +66,15 @@ public class ParserTest {
         Parser parser = new Parser();
         TaskList testTaskLists = new TaskList();
 
-        testTaskLists = parser.parseCommand("deadline read /by 2020-01-01", testTaskLists, ui);
-        testTaskLists = parser.parseCommand("deadline read", testTaskLists, ui);
+        testTaskLists = parser.parseCommand("deadline read /by 2020-01-01 high", testTaskLists, ui);
+        assertEquals("WRONG FORMAT :(\nDate and time (24-hour) format: YYYY-MM-DD HHmm",
+                ui.toString(),
+                "Check correct error message is printed.");
+
+        testTaskLists = parser.parseCommand("deadline read high", testTaskLists, ui);
+        assertEquals("WRONG FORMAT :(\n" + "Format: deadline <task> /by <date> <time> <priority>",
+                ui.toString(),
+                "Check correct error message is printed.");
 
         assertEquals(0, testTaskLists.getSize(), "Check size is correct after error");
     }
@@ -80,11 +88,11 @@ public class ParserTest {
         Parser parser = new Parser();
         TaskList testTaskLists = new TaskList();
 
-        testTaskLists = parser.parseCommand("event read /from 2020-01-01 1600 /to 2020-01-01 1800",
+        testTaskLists = parser.parseCommand("event read /from 2020-01-01 1600 /to 2020-01-01 1800 HIGH",
                 testTaskLists, ui);
 
         assertEquals(1, testTaskLists.getSize(), "Check size is correct after command");
-        assertEquals("[E][ ] read (from: Jan 1 2020 04:00 pm to: Jan 1 2020 06:00 pm)",
+        assertEquals("[E][ ] read <HIGH> (from: Jan 1 2020 04:00 pm to: Jan 1 2020 06:00 pm)",
                 testTaskLists.get(0).toString(), "Check task list is correct after command");
     }
 
@@ -99,8 +107,15 @@ public class ParserTest {
 
         testTaskLists = parser.parseCommand("event read from 2020-01-01 1600 to 2020-01-01 1800",
                 testTaskLists, ui);
+        assertEquals("WRONG FORMAT :(\nFormat: event <task> /from <date> <time> /to <date> <time> <priority>",
+                ui.toString(),
+                "Check correct error message is printed.");
+
         testTaskLists = parser.parseCommand("event read /from 2020-01-01 /to 2020-01-1 1800",
                 testTaskLists, ui);
+        assertEquals("WRONG FORMAT :(\nDate and time (24-hour) format: YYYY-MM-DD HHmm",
+                ui.toString(),
+                "Check correct error message is printed.");
 
         assertEquals(0, testTaskLists.getSize(), "Check size is correct after error");
     }
@@ -114,15 +129,15 @@ public class ParserTest {
         Parser parser = new Parser();
         TaskList testTaskLists = new TaskList();
 
-        testTaskLists = parser.parseCommand("todo read", testTaskLists, ui);
-        testTaskLists = parser.parseCommand("todo eat", testTaskLists, ui);
-        testTaskLists = parser.parseCommand("todo exercise", testTaskLists, ui);
+        testTaskLists = parser.parseCommand("todo read high", testTaskLists, ui);
+        testTaskLists = parser.parseCommand("todo eat high", testTaskLists, ui);
+        testTaskLists = parser.parseCommand("todo exercise low", testTaskLists, ui);
         testTaskLists = parser.parseCommand("delete 2", testTaskLists, ui);
 
         assertEquals(2, testTaskLists.getSize(), "Check size is correct after delete");
-        assertEquals("[T][ ] read", testTaskLists.get(0).toString(),
+        assertEquals("[T][ ] read <HIGH>", testTaskLists.get(0).toString(),
                 "Check tasks are correct after delete");
-        assertEquals("[T][ ] exercise", testTaskLists.get(1).toString(),
+        assertEquals("[T][ ] exercise <LOW>", testTaskLists.get(1).toString(),
                 "Check tasks are correct after delete");
     }
 
@@ -135,11 +150,11 @@ public class ParserTest {
         Parser parser = new Parser();
         TaskList testTaskLists = new TaskList();
 
-        testTaskLists = parser.parseCommand("todo read", testTaskLists, ui);
+        testTaskLists = parser.parseCommand("todo read high", testTaskLists, ui);
         testTaskLists = parser.parseCommand("delete 2", testTaskLists, ui);
 
         assertEquals(1, testTaskLists.getSize(), "Check size is correct after error");
-        assertEquals("[T][ ] read", testTaskLists.get(0).toString(),
+        assertEquals("[T][ ] read <HIGH>", testTaskLists.get(0).toString(),
                 "Check tasks are correct after error");
     }
 
@@ -152,13 +167,13 @@ public class ParserTest {
         Parser parser = new Parser();
         TaskList testTaskLists = new TaskList();
 
-        testTaskLists = parser.parseCommand("todo Read", testTaskLists, ui);
-        testTaskLists = parser.parseCommand("todo Eat", testTaskLists, ui);
+        testTaskLists = parser.parseCommand("todo Read HIGH", testTaskLists, ui);
+        testTaskLists = parser.parseCommand("todo Eat LOW", testTaskLists, ui);
         testTaskLists = parser.parseCommand("mark 1", testTaskLists, ui);
 
-        assertEquals("[T][X] Read", testTaskLists.get(0).toString(),
+        assertEquals("[T][X] Read <HIGH>", testTaskLists.get(0).toString(),
                 "Check that correct task is marked");
-        assertEquals("[T][ ] Eat", testTaskLists.get(1).toString(),
+        assertEquals("[T][ ] Eat <LOW>", testTaskLists.get(1).toString(),
                 "Check that correct task is marked");
     }
 
@@ -171,15 +186,15 @@ public class ParserTest {
         Parser parser = new Parser();
         TaskList testTaskLists = new TaskList();
 
-        testTaskLists = parser.parseCommand("todo Read", testTaskLists, ui);
-        testTaskLists = parser.parseCommand("todo Eat", testTaskLists, ui);
+        testTaskLists = parser.parseCommand("todo Read high", testTaskLists, ui);
+        testTaskLists = parser.parseCommand("todo Eat low", testTaskLists, ui);
         testTaskLists = parser.parseCommand("mark 1", testTaskLists, ui);
         testTaskLists = parser.parseCommand("mark 2", testTaskLists, ui);
         testTaskLists = parser.parseCommand("unmark 2", testTaskLists, ui);
 
-        assertEquals("[T][X] Read", testTaskLists.get(0).toString(),
+        assertEquals("[T][X] Read <HIGH>", testTaskLists.get(0).toString(),
                 "Check that correct task is unmarked");
-        assertEquals("[T][ ] Eat", testTaskLists.get(1).toString(),
+        assertEquals("[T][ ] Eat <LOW>", testTaskLists.get(1).toString(),
                 "Check that correct task is unmarked");
     }
 
@@ -192,12 +207,12 @@ public class ParserTest {
         Parser parser = new Parser();
         TaskList testTaskLists = new TaskList();
 
-        testTaskLists = testTaskLists.add(new ToDo("Read book"));
-        testTaskLists = testTaskLists.add(new ToDo("Eat"));
-        testTaskLists = testTaskLists.add(new ToDo("Write book"));
+        testTaskLists = testTaskLists.add(new ToDo("Read book", Priority.LOW));
+        testTaskLists = testTaskLists.add(new ToDo("Eat", Priority.HIGH));
+        testTaskLists = testTaskLists.add(new ToDo("Write book", Priority.HIGH));
         parser.parseCommand("find book", testTaskLists, ui);
 
-        assertEquals("Here are the tasks I found:\n1.[T][ ] Read book\n2.[T][ ] Write book\n",
+        assertEquals("Here are the tasks I found:\n1.[T][ ] Write book <HIGH>\n2.[T][ ] Read book <LOW>\n",
                 ui.toString(),
                 "Check that correct tasks are found");
     }
@@ -211,13 +226,26 @@ public class ParserTest {
         Parser parser = new Parser();
         TaskList testTaskLists = new TaskList();
 
-        testTaskLists = testTaskLists.add(new ToDo("Read newspaper"));
-        testTaskLists = testTaskLists.add(new ToDo("Eat"));
-        testTaskLists = testTaskLists.add(new ToDo("Write book"));
+        testTaskLists = testTaskLists.add(new ToDo("Read newspaper", Priority.LOW));
+        testTaskLists = testTaskLists.add(new ToDo("Eat", Priority.HIGH));
+        testTaskLists = testTaskLists.add(new ToDo("Write book", Priority.HIGH));
         parser.parseCommand("find book,read", testTaskLists, ui);
 
-        assertEquals("Here are the tasks I found:\n1.[T][ ] Read newspaper\n2.[T][ ] Write book\n",
+        assertEquals("Here are the tasks I found:\n1.[T][ ] Write book <HIGH>\n"
+                        + "2.[T][ ] Read newspaper <LOW>\n",
                 ui.toString(),
                 "Check that correct tasks are found");
+    }
+
+    @Test
+    public void testWrongPriority() {
+        Ui ui = new Ui();
+        Parser parser = new Parser();
+        TaskList testTaskLists = new TaskList();
+
+        testTaskLists = parser.parseCommand("todo read max", testTaskLists, ui);
+        assertEquals("WRONG PRIORITY :(\nThe priority levels are HIGH, MEDIUM or LOW\n",
+                ui.toString(),
+                "Check correct error message is printed.");
     }
 }

@@ -1,11 +1,13 @@
 package bpluschatter.task;
 
+import bpluschatter.enumerations.Priority;
+
 /**
  * Represents todo task.
  */
 public class ToDo extends Task {
-    public ToDo(String description) {
-        super(description);
+    public ToDo(String description, Priority priority) {
+        super(description, priority);
     }
 
     /**
@@ -17,7 +19,7 @@ public class ToDo extends Task {
     public String toFileFormat() {
         String task = "T |";
         task += isDone ? " 1 | " : " 0 | ";
-        return task + description;
+        return task + description + " | " + this.priority.toString();
     }
 
     /**

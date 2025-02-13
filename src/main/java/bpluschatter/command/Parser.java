@@ -6,6 +6,7 @@ import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
 import java.util.Arrays;
 
+import bpluschatter.enumerations.Priority;
 import bpluschatter.exception.InvalidDeadlineException;
 import bpluschatter.exception.InvalidDeleteException;
 import bpluschatter.exception.InvalidEventException;
@@ -13,6 +14,7 @@ import bpluschatter.exception.InvalidMarkException;
 import bpluschatter.exception.InvalidOnException;
 import bpluschatter.exception.InvalidToDoException;
 import bpluschatter.exception.UnknownCommandException;
+import bpluschatter.exception.UnknownPriorityException;
 import bpluschatter.task.Deadline;
 import bpluschatter.task.Event;
 import bpluschatter.task.Task;
@@ -37,22 +39,48 @@ public class Parser {
         this.dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HHmm");
     }
 
+    private String[] getDescriptionAndPriorityAsStrings(String details) {
+        int indexOfLastSpace = details.lastIndexOf(" ");
+        return new String[]{details.substring(0, indexOfLastSpace), details.substring(indexOfLastSpace + 1)};
+    }
+
+    private Priority getPriority(String details) throws UnknownPriorityException {
+        switch (details.toLowerCase()) {
+        case "high" -> {
+            return Priority.HIGH;
+        }
+        case "medium" -> {
+            return Priority.MEDIUM;
+        }
+        case "low" -> {
+            return Priority.LOW;
+        }
+        default -> throw new UnknownPriorityException();
+        }
+    }
+
     /**
      * Returns updated list of tasks after adding ToDo task.
      *
-     * @param details Details of todo command.
      * @param tasks List of tasks.
      * @param ui UI object.
+     * @param details Details of todo command.
      * @return Updated list of tasks.
      * @throws InvalidToDoException If details is empty.
+     * @throws UnknownPriorityException If priority does not exist.
      */
-    private TaskList parseToDo(String details, TaskList tasks, Ui ui) throws InvalidToDoException {
+    private TaskList parseToDo(TaskList tasks, Ui ui, String details) throws InvalidToDoException,
+            UnknownPriorityException {
         assert ui != null : "There should be a UI object.";
+
         if (details.isEmpty()) {
             throw new InvalidToDoException();
         }
 
-        ToDo toDo = new ToDo(details);
+        String[] detailParts = getDescriptionAndPriorityAsStrings(details);
+
+        Priority priority = getPriority(detailParts[1]);
+        ToDo toDo = new ToDo(detailParts[0], priority);
         TaskList newTasks = tasks.add(toDo);
         ui.setAddMessage(toDo, tasks.getSize());
 
@@ -63,15 +91,16 @@ public class Parser {
     /**
      * Returns updated list of tasks after adding Deadline task.
      *
-     * @param details Details of deadline command.
      * @param tasks List of tasks.
      * @param ui UI object.
+     * @param details Details of deadline command.
      * @return Updated list of tasks.
      * @throws DateTimeParseException If date and time format is wrong.
      * @throws InvalidDeadlineException If deadline command is incomplete.
+     * @throws UnknownPriorityException If priority does not exist.
      */
-    private TaskList parseDeadline(String details, TaskList tasks, Ui ui) throws DateTimeParseException,
-            InvalidDeadlineException {
+    private TaskList parseDeadline(TaskList tasks, Ui ui, String details) throws DateTimeParseException,
+            InvalidDeadlineException, UnknownPriorityException {
 
         assert ui != null : "There should be a UI object.";
         String[] detailParts = details.split(" /by ", 2);
@@ -80,8 +109,11 @@ public class Parser {
             throw new InvalidDeadlineException();
         }
 
-        LocalDateTime by = LocalDateTime.parse(detailParts[1], dateTimeFormatter);
-        Deadline deadline = new Deadline(detailParts[0], by);
+        String[] byAndPriorityStrings = getDescriptionAndPriorityAsStrings(detailParts[1]);
+        LocalDateTime by = LocalDateTime.parse(byAndPriorityStrings[0], dateTimeFormatter);
+        Priority priority = getPriority(byAndPriorityStrings[1]);
+
+        Deadline deadline = new Deadline(detailParts[0], priority, by);
         TaskList newTasks = tasks.add(deadline);
         ui.setAddMessage(deadline, tasks.getSize());
 
@@ -93,15 +125,16 @@ public class Parser {
     /**
      * Returns updated list of tasks after adding Event task.
      *
-     * @param details Details of event command.
      * @param tasks List of tasks.
      * @param ui UI object.
+     * @param details Details of event command.
      * @return Updated list of tasks.
      * @throws DateTimeParseException If date and time format is wrong.
      * @throws InvalidEventException If event command is incomplete.
+     * @throws UnknownPriorityException If priority does not exist.
      */
-    private TaskList parseEvent(String details, TaskList tasks, Ui ui) throws DateTimeParseException,
-            InvalidEventException {
+    private TaskList parseEvent(TaskList tasks, Ui ui, String details) throws DateTimeParseException,
+            InvalidEventException, UnknownPriorityException {
         assert ui != null : "There should be a UI object.";
 
         if (details.isEmpty()) {
@@ -117,9 +150,12 @@ public class Parser {
             throw new InvalidEventException();
         }
 
+        String[] toAndPriorityStrings = getDescriptionAndPriorityAsStrings(duration[1]);
         LocalDateTime from = LocalDateTime.parse(duration[0], dateTimeFormatter);
-        LocalDateTime to = LocalDateTime.parse(duration[1], dateTimeFormatter);
-        Event event = new Event(detailParts[0], from, to);
+        LocalDateTime to = LocalDateTime.parse(toAndPriorityStrings[0], dateTimeFormatter);
+        Priority priority = getPriority(toAndPriorityStrings[1]);
+
+        Event event = new Event(detailParts[0], priority, from, to);
         TaskList newTasks = tasks.add(event);
         ui.setAddMessage(event, tasks.getSize());
 
@@ -131,14 +167,14 @@ public class Parser {
     /**
      * Returns updated list of tasks after adding marking/unmarking a task.
      *
-     * @param details Index of task to be marked/unmarked.
      * @param tasks List of tasks.
      * @param ui UI object.
+     * @param details Index of task to be marked/unmarked.
      * @param isDone Is true if task is marked as completed, false if unmarked.
      * @return Updated list of tasks.
      * @throws InvalidMarkException If index is not a number or index larger than number of tasks.
      */
-    private TaskList parseMark(String details, TaskList tasks, Ui ui, boolean isDone) throws InvalidMarkException {
+    private TaskList parseMark(TaskList tasks, Ui ui, boolean isDone, String details) throws InvalidMarkException {
         assert ui != null : "There should be a UI object.";
         try {
             int taskIndex = Integer.parseInt(details) - 1;
@@ -155,13 +191,13 @@ public class Parser {
     /**
      * Returns updated list of tasks after adding deleting a task.
      *
-     * @param details Index of task to be deleted.
      * @param tasks List of tasks.
      * @param ui UI object.
+     * @param details Index of task to be deleted.
      * @return Updated list of tasks.
      * @throws InvalidDeleteException If index is not a number or index larger than number of tasks.
      */
-    private TaskList parseDelete(String details, TaskList tasks, Ui ui) throws InvalidDeleteException {
+    private TaskList parseDelete(TaskList tasks, Ui ui, String details) throws InvalidDeleteException {
         assert ui != null : "There should be a UI object.";
         try {
             int taskIndex = Integer.parseInt(details) - 1;
@@ -179,12 +215,12 @@ public class Parser {
     /**
      * Prints tasks that occur on specific date.
      *
-     * @param details Date in format yyyy-MM-dd.
      * @param tasks List of tasks.
+     * @param details Date in format yyyy-MM-dd.
      * @throws InvalidOnException If details is empty.
      * @throws DateTimeParseException If date format is wrong or on command is incomplete or incorrect.
      */
-    private void parseOn(String details, TaskList tasks, Ui ui) throws InvalidOnException, DateTimeParseException {
+    private void parseOn(TaskList tasks, Ui ui, String details) throws InvalidOnException, DateTimeParseException {
         if (details.isEmpty()) {
             throw new InvalidOnException();
         }
@@ -244,25 +280,25 @@ public class Parser {
                 return tasks;
             }
             case "todo" -> {
-                return parseToDo(details, tasks, ui);
+                return parseToDo(tasks, ui, details);
             }
             case "deadline" -> {
-                return parseDeadline(details, tasks, ui);
+                return parseDeadline(tasks, ui, details);
             }
             case "event" -> {
-                return parseEvent(details, tasks, ui);
+                return parseEvent(tasks, ui, details);
             }
             case "mark" -> {
-                return parseMark(details, tasks, ui, true);
+                return parseMark(tasks, ui, true, details);
             }
             case "unmark" -> {
-                return parseMark(details, tasks, ui, false);
+                return parseMark(tasks, ui, false, details);
             }
             case "delete" -> {
-                return parseDelete(details, tasks, ui);
+                return parseDelete(tasks, ui, details);
             }
             case "on" -> {
-                parseOn(details, tasks, ui);
+                parseOn(tasks, ui, details);
                 return tasks;
             }
             case "find" -> {
@@ -287,6 +323,8 @@ public class Parser {
             ui.setDeleteError(tasks.getSize());
         } catch (InvalidOnException e) {
             ui.setOnError();
+        } catch (UnknownPriorityException e) {
+            ui.setPriorityError();
         }
         return tasks;
     }
@@ -299,17 +337,18 @@ public class Parser {
      */
     public Task parseFromFile(String taskString) {
         String[] taskParts = taskString.split(" \\| ");
-        Task newTask = new Task(taskParts[2]);
+        Priority priority = getPriority(taskParts[taskParts.length - 1]);
+        Task newTask = new Task(taskParts[2], priority);
         switch (taskParts[0]) {
-        case "T" -> newTask = new ToDo(taskParts[2]);
+        case "T" -> newTask = new ToDo(taskParts[2], priority);
         case "D" -> {
             LocalDateTime by = LocalDateTime.parse(taskParts[3], dateTimeFormatter);
-            newTask = new Deadline(taskParts[2], by);
+            newTask = new Deadline(taskParts[2], priority, by);
         }
         case "E" -> {
             LocalDateTime from = LocalDateTime.parse(taskParts[3], dateTimeFormatter);
             LocalDateTime to = LocalDateTime.parse(taskParts[4], dateTimeFormatter);
-            newTask = new Event(taskParts[2], from, to);
+            newTask = new Event(taskParts[2], priority, from, to);
         }
         default -> {
             assert false : "Code should not reach here.";

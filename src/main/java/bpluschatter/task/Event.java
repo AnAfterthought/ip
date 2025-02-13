@@ -3,6 +3,8 @@ package bpluschatter.task;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
+import bpluschatter.enumerations.Priority;
+
 /**
  * Represents an event task.
  */
@@ -18,8 +20,8 @@ public class Event extends Task {
      * @param from Start of event.
      * @param to End of event.
      */
-    public Event(String description, LocalDateTime from, LocalDateTime to) {
-        super(description);
+    public Event(String description, Priority priority, LocalDateTime from, LocalDateTime to) {
+        super(description, priority);
         this.from = from;
         this.to = to;
     }
@@ -35,7 +37,8 @@ public class Event extends Task {
         task += isDone ? " 1 | " : " 0 | ";
         return task + this.description + " | "
                 + this.from.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HHmm")) + " | "
-                + this.to.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HHmm"));
+                + this.to.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HHmm"))
+                + " | " + this.priority.toString();
     }
 
     /**

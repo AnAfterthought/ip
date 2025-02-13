@@ -1,6 +1,7 @@
 package bpluschatter.task;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.stream.Stream;
 
 /**
@@ -86,6 +87,7 @@ public class TaskList {
 
     @Override
     public String toString() {
+        Collections.sort(tasks);
         String tasksString = "";
         for (int i = 0; i < tasks.size(); i++) {
             tasksString += (i + 1) + "." + tasks.get(i) + "\n";
