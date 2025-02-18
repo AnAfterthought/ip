@@ -43,18 +43,21 @@ Format: ```list```
 
 ## Mark task: ```mark```
 Marks a task as complete.<br>
+TASK_NUMBER is the number next to the task when the list is displayed.<br>
 Format: ```mark TASK_NUMBER```<br>
 Example:<br>
 ```mark 1```
 
 ## Unmark task: ```unmark```
 Marks a task as incomplete.<br>
+TASK_NUMBER is the number next to the task when the list is displayed.<br>
 Format: ```unmark TASK_NUMBER```<br>
 Example:<br>
 ```unmark 1```
 
 ## Delete task: ```delete```
 Deletes a task.<br>
+TASK_NUMBER is the number next to the task when the list is displayed.<br>
 Format: ```delete TASK_NUMBER```<br>
 Example:<br>
 ```delete 1```
