@@ -1,3 +1,2 @@
-D | 0 | homework | 2025-02-25 2359 | HIGH
-E | 0 | meeting | 2025-02-25 1400 | 2025-02-25 1600 | HIGH
+D | 1 | homework | 2025-02-25 2359 | HIGH
 T | 0 | read | MEDIUM
