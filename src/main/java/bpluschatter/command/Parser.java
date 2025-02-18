@@ -39,8 +39,11 @@ public class Parser {
         this.dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HHmm");
     }
 
-    private String[] getDescriptionAndPriorityAsStrings(String details) {
+    private String[] getDescriptionAndPriorityAsStrings(String details) throws UnknownPriorityException {
         int indexOfLastSpace = details.lastIndexOf(" ");
+        if (indexOfLastSpace == -1) {
+            throw new UnknownPriorityException();
+        }
         return new String[]{details.substring(0, indexOfLastSpace), details.substring(indexOfLastSpace + 1)};
     }
 
@@ -110,8 +113,8 @@ public class Parser {
         }
 
         String[] byAndPriorityStrings = getDescriptionAndPriorityAsStrings(detailParts[1]);
-        LocalDateTime by = LocalDateTime.parse(byAndPriorityStrings[0], dateTimeFormatter);
         Priority priority = getPriority(byAndPriorityStrings[1]);
+        LocalDateTime by = LocalDateTime.parse(byAndPriorityStrings[0], dateTimeFormatter);
 
         Deadline deadline = new Deadline(detailParts[0], priority, by);
         TaskList newTasks = tasks.add(deadline);
@@ -151,9 +154,9 @@ public class Parser {
         }
 
         String[] toAndPriorityStrings = getDescriptionAndPriorityAsStrings(duration[1]);
+        Priority priority = getPriority(toAndPriorityStrings[1]);
         LocalDateTime from = LocalDateTime.parse(duration[0], dateTimeFormatter);
         LocalDateTime to = LocalDateTime.parse(toAndPriorityStrings[0], dateTimeFormatter);
-        Priority priority = getPriority(toAndPriorityStrings[1]);
 
         Event event = new Event(detailParts[0], priority, from, to);
         TaskList newTasks = tasks.add(event);
@@ -239,7 +242,8 @@ public class Parser {
      * @return True if string contains any keyword, false otherwise.
      */
     private boolean doesStringContainItemFromArray(Task task, String ... keywords) {
-        return Arrays.stream(keywords).anyMatch(task.toString().toLowerCase()::contains);
+        return Arrays.stream(keywords).map(x -> x.toLowerCase())
+                .anyMatch(task.toString().toLowerCase()::contains);
     }
 
     /**

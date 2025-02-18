@@ -72,7 +72,7 @@ public class ParserTest {
                 "Check correct error message is printed.");
 
         testTaskLists = parser.parseCommand("deadline read high", testTaskLists, ui);
-        assertEquals("WRONG FORMAT :(\n" + "Format: deadline <task> /by <date> <time> <priority>",
+        assertEquals("WRONG FORMAT :(\n" + "Format: deadline TASK /by DATE TIME PRIORITY",
                 ui.toString(),
                 "Check correct error message is printed.");
 
@@ -107,11 +107,11 @@ public class ParserTest {
 
         testTaskLists = parser.parseCommand("event read from 2020-01-01 1600 to 2020-01-01 1800",
                 testTaskLists, ui);
-        assertEquals("WRONG FORMAT :(\nFormat: event <task> /from <date> <time> /to <date> <time> <priority>",
+        assertEquals("WRONG FORMAT :(\nFormat: event TASK /from DATE TIME /to DATE TIME PRIORITY",
                 ui.toString(),
                 "Check correct error message is printed.");
 
-        testTaskLists = parser.parseCommand("event read /from 2020-01-01 /to 2020-01-1 1800",
+        testTaskLists = parser.parseCommand("event read /from 2020-01-01 /to 2020-01-1 1800 HIGH",
                 testTaskLists, ui);
         assertEquals("WRONG FORMAT :(\nDate and time (24-hour) format: YYYY-MM-DD HHmm",
                 ui.toString(),
@@ -244,7 +244,8 @@ public class ParserTest {
         TaskList testTaskLists = new TaskList();
 
         testTaskLists = parser.parseCommand("todo read max", testTaskLists, ui);
-        assertEquals("WRONG PRIORITY :(\nThe priority levels are HIGH, MEDIUM or LOW\n",
+        assertEquals("WRONG PRIORITY :(\nRemember to add a priority level at the end of the command.\n"
+                        + "The priority levels are HIGH, MEDIUM or LOW\n",
                 ui.toString(),
                 "Check correct error message is printed.");
     }

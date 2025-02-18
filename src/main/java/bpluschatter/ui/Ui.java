@@ -60,7 +60,7 @@ public class Ui {
      * Sets error message for todo command.
      */
     public void setToDoError() {
-        this.message = "WRONG FORMAT :(\n" + "Format: todo <task> <priority>";
+        this.message = "WRONG FORMAT :(\n" + "Format: todo TASK PRIORITY";
         isError = true;
     }
 
@@ -68,7 +68,7 @@ public class Ui {
      * Sets error message for deadline command.
      */
     public void setDeadlineError() {
-        this.message = "WRONG FORMAT :(\n" + "Format: deadline <task> /by <date> <time> <priority>";
+        this.message = "WRONG FORMAT :(\n" + "Format: deadline TASK /by DATE TIME PRIORITY";
         isError = true;
     }
 
@@ -76,7 +76,7 @@ public class Ui {
      * Sets error message for event command.
      */
     public void setEventError() {
-        this.message = "WRONG FORMAT :(\n" + "Format: event <task> /from <date> <time> /to <date> <time> <priority>";
+        this.message = "WRONG FORMAT :(\n" + "Format: event TASK /from DATE TIME /to DATE TIME PRIORITY";
         isError = true;
     }
 
@@ -84,7 +84,7 @@ public class Ui {
      * Sets error message for on command.
      */
     public void setOnError() {
-        this.message = "WRONG FORMAT :(\n" + "Format: on yyyy-MM-dd";
+        this.message = "WRONG FORMAT :(\n" + "Format: on YYYY-MM-DD";
         isError = true;
     }
 
@@ -125,7 +125,7 @@ public class Ui {
      * Sets error message for mark/unmark command.
      */
     public void setMarkError(int count) {
-        this.message = "WRONG FORMAT :(\n" + "Format: mark/unmark <task number>\n"
+        this.message = "WRONG FORMAT :(\n" + "Format: mark/unmark TASK_NUMBER\n"
                 + "You have " + count + " task(s)";
         isError = true;
     }
@@ -134,7 +134,7 @@ public class Ui {
      * Sets error message for delete command.
      */
     public void setDeleteError(int count) {
-        this.message = "WRONG FORMAT :(\nFormat: delete <task number>\n"
+        this.message = "WRONG FORMAT :(\nFormat: delete TASK_NUMBER\n"
                 + "You have " + count + " task(s)";
         isError = true;
     }
@@ -175,7 +175,8 @@ public class Ui {
      * Sets error message if invalid priority is encountered.
      */
     public void setPriorityError() {
-        this.message = "WRONG PRIORITY :(\nThe priority levels are HIGH, MEDIUM or LOW\n";
+        this.message = "WRONG PRIORITY :(\nRemember to add a priority level at the end of the command.\n"
+                + "The priority levels are HIGH, MEDIUM or LOW\n";
         isError = true;
     }
 
