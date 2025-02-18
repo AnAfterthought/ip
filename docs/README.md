@@ -38,7 +38,7 @@ Example:<br>
 ```event meeting /from 2025-02-25 1400 /to 2025-02-25 1600 HIGH```
 
 ## List: ```list```
-Shows a list of tasks.<br>
+Shows a list of tasks ordered in descending priority.<br>
 Format: ```list```
 
 ## Mark task: ```mark```
