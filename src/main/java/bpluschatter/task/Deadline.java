@@ -55,6 +55,7 @@ public class Deadline extends Task {
     @Override
     public String toString() {
         return "[D]" + super.toString() + " (by: "
-                + this.by.format(DateTimeFormatter.ofPattern("MMM d yyyy hh:mm a")) + ")";
+                + this.by.format(DateTimeFormatter.ofPattern("MMM d yyyy hh:mm a")) + ")"
+                .replace("AM", "am").replace("PM", "pm");
     }
 }
