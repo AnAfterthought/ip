@@ -339,9 +339,11 @@ public class Parser {
      *
      * @param taskString String from save file.
      * @return Task.
+     * @throws InvalidFileFormatException If format of string is incorrect.
+     * @throws UnknownPriorityException If priority is invalid.
      */
     public Task parseFromFile(String taskString) throws InvalidFileFormatException,
-            UnknownPriorityException, IndexOutOfBoundsException {
+            UnknownPriorityException {
         String[] taskParts = taskString.split(" \\| ");
         Priority priority = getPriority(taskParts[taskParts.length - 1]);
         Task newTask;
