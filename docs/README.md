@@ -81,6 +81,7 @@ e.g. ```read,homework``` will match ```homework,read```.
 e.g. ```home``` will match ```homework```.
 - Tasks matching one keyword will be returned.
 e.g. ```read,homework``` will return ```read book```,```do homework```.<br>
+
 Examples:<br>
 - ```find home``` returns ```homework```
 - ```find read,homework``` returns ```homework,read```<br>
