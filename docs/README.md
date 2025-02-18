@@ -89,3 +89,8 @@ Examples:<br>
 ## Exiting the program: ```bye```
 Exits the program.<br>
 Format: ```bye```
+
+## Saving the data
+BPlusChatter automatically saves tasks after any successful command that changes the data.<br>
+There is no need to save manually.
+The save file can be found at ```[JAR file location]/data/BPlusChatter.txt```.
