@@ -5,19 +5,19 @@
 A helpful chatbot designed to keep track of your tasks. <br>
 With CLI commands, you can easily add, delete, view and track your tasks!
 
-> [!IMPORTANT]
-> - Words in ```UPPER_CASE``` are the parameters to be supplied by the user.<br>
-> e.g. in ```todo TASK```, ```TASK``` is a parameter which can be used as
-> ```todo homework```.<br>
-> - Items in square brackets are optional.
-> - e.g. ```find KEYWORD[,MORE_KEYWORDS]``` can be used as
-> ```find homework``` or ```find homework,shopping```.
-> - Parameters need to be in order.
-> - Date format is YYYY-MM-DD.<br>
-> e.g. if you want to enter 3rd February 2025, use ```2025-02-03```
-> - Time format is 24-hour notation HHmm.<br>
-> e.g. if you want to enter 5.30pm, use ```1730```
-> - Priority levels accepted are ```HIGH```,```MEDIUM``` and ```LOW```.
+## TIPS
+- Words in ```UPPER_CASE``` are the parameters to be supplied by the user.<br>
+e.g. in ```todo TASK```, ```TASK``` is a parameter which can be used as
+```todo homework```.<br>
+- Items in square brackets are optional.
+- e.g. ```find KEYWORD[,MORE_KEYWORDS]``` can be used as
+```find homework``` or ```find homework,shopping```.
+- Parameters need to be in order.
+- Date format is YYYY-MM-DD.<br>
+e.g. if you want to enter 3rd February 2025, use ```2025-02-03```
+- Time format is 24-hour notation HHmm.<br>
+e.g. if you want to enter 5.30pm, use ```1730```
+- Priority levels accepted are ```HIGH```,```MEDIUM``` and ```LOW```.
 
 ## Adding todos: ```todo```
 Adds a task that you have to do but the task does not have a time constraint.<br>
