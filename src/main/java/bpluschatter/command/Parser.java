@@ -149,14 +149,14 @@ public class Parser {
         if (detailParts.length != 2) {
             throw new InvalidEventException();
         }
-        String[] duration = detailParts[1].split(" /to ", 2);
-        if (duration.length != 2) {
+        String[] fromToAndPriorityStrings = detailParts[1].split(" /to ", 2);
+        if (fromToAndPriorityStrings.length != 2) {
             throw new InvalidEventException();
         }
 
-        String[] toAndPriorityStrings = getDescriptionAndPriorityAsStrings(duration[1]);
+        String[] toAndPriorityStrings = getDescriptionAndPriorityAsStrings(fromToAndPriorityStrings[1]);
         Priority priority = getPriority(toAndPriorityStrings[1]);
-        LocalDateTime from = LocalDateTime.parse(duration[0], dateTimeFormatter);
+        LocalDateTime from = LocalDateTime.parse(fromToAndPriorityStrings[0], dateTimeFormatter);
         LocalDateTime to = LocalDateTime.parse(toAndPriorityStrings[0], dateTimeFormatter);
 
         Event event = new Event(detailParts[0], priority, from, to);
