@@ -10,6 +10,7 @@ import bpluschatter.enumerations.Priority;
 import bpluschatter.exception.InvalidDeadlineException;
 import bpluschatter.exception.InvalidDeleteException;
 import bpluschatter.exception.InvalidEventException;
+import bpluschatter.exception.InvalidFileFormatException;
 import bpluschatter.exception.InvalidMarkException;
 import bpluschatter.exception.InvalidOnException;
 import bpluschatter.exception.InvalidToDoException;
@@ -339,10 +340,11 @@ public class Parser {
      * @param taskString String from save file.
      * @return Task.
      */
-    public Task parseFromFile(String taskString) {
+    public Task parseFromFile(String taskString) throws InvalidFileFormatException,
+            UnknownPriorityException, IndexOutOfBoundsException {
         String[] taskParts = taskString.split(" \\| ");
         Priority priority = getPriority(taskParts[taskParts.length - 1]);
-        Task newTask = new Task(taskParts[2], priority);
+        Task newTask;
         switch (taskParts[0]) {
         case "T" -> newTask = new ToDo(taskParts[2], priority);
         case "D" -> {
@@ -355,11 +357,15 @@ public class Parser {
             newTask = new Event(taskParts[2], priority, from, to);
         }
         default -> {
-            assert false : "Code should not reach here.";
+            throw new InvalidFileFormatException();
         }
         }
         if (taskParts[1].equals("1")) {
             newTask.setIsDone(true);
+        } else if (taskParts[1].equals("0")) {
+            return newTask;
+        } else {
+            throw new InvalidFileFormatException();
         }
         return newTask;
     }

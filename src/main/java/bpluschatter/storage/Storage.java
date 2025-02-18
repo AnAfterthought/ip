@@ -3,10 +3,13 @@ package bpluschatter.storage;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
 import java.util.Scanner;
 
 import bpluschatter.command.Parser;
+import bpluschatter.exception.InvalidFileFormatException;
+import bpluschatter.exception.UnknownPriorityException;
 import bpluschatter.task.Task;
 import bpluschatter.task.TaskList;
 
@@ -51,13 +54,27 @@ public class Storage {
      * @throws IOException If error occurs during file creation.
      */
     public ArrayList<Task> load() throws IOException {
-        File file = new File(filePath);
-        ArrayList<Task> tasks = new ArrayList<>();
-        Scanner scanner = new Scanner(file);
-        while (scanner.hasNext()) {
-            tasks.add(parser.parseFromFile(scanner.nextLine()));
+        try {
+            ArrayList<Task> tasks = new ArrayList<>();
+            File file = new File(filePath);
+            Scanner scanner = new Scanner(file);
+            while (scanner.hasNext()) {
+                tasks.add(parser.parseFromFile(scanner.nextLine()));
+            }
+            return tasks;
+        } catch (InvalidFileFormatException e) {
+            System.out.println("File format corrupted.");
+            return new ArrayList<Task>();
+        } catch (UnknownPriorityException e) {
+            System.out.println("Invalid priority detected.");
+            return new ArrayList<Task>();
+        } catch (IndexOutOfBoundsException e) {
+            System.out.println("Number of fields is incorrect.");
+            return new ArrayList<Task>();
+        } catch (DateTimeParseException e) {
+            System.out.println("Date and time format is incorrect");
+            return new ArrayList<Task>();
         }
-        return tasks;
     }
 
     /**
