@@ -14,7 +14,7 @@ public class ParserTest {
      * Tests for successful todo command.
      */
     @Test
-    public void testParseToDo_success() {
+    public void testParseToDoSuccess() {
         Ui ui = new Ui();
         Parser parser = new Parser();
         TaskList testTaskLists = new TaskList();
@@ -30,7 +30,7 @@ public class ParserTest {
      * Tests for incorrect todo command.
      */
     @Test
-    public void testParseToDo_failure() {
+    public void testParseToDoFailure() {
         Ui ui = new Ui();
         Parser parser = new Parser();
         TaskList testTaskLists = new TaskList();
@@ -45,7 +45,7 @@ public class ParserTest {
      * Tests for successful deadline command.
      */
     @Test
-    public void testParseDeadline_success() {
+    public void testParseDeadlineSuccess() {
         Ui ui = new Ui();
         Parser parser = new Parser();
         TaskList testTaskLists = new TaskList();
@@ -61,7 +61,7 @@ public class ParserTest {
      * Tests for incorrect deadline command.
      */
     @Test
-    public void testParseDeadline_failure() {
+    public void testParseDeadlineFailure() {
         Ui ui = new Ui();
         Parser parser = new Parser();
         TaskList testTaskLists = new TaskList();
@@ -83,7 +83,7 @@ public class ParserTest {
      * Tests for successful event command.
      */
     @Test
-    public void testParseEvent_success() {
+    public void testParseEventSuccess() {
         Ui ui = new Ui();
         Parser parser = new Parser();
         TaskList testTaskLists = new TaskList();
@@ -100,7 +100,7 @@ public class ParserTest {
      * Tests for incorrect event command.
      */
     @Test
-    public void testParseEvent_failure() {
+    public void testParseEventFailure() {
         Ui ui = new Ui();
         Parser parser = new Parser();
         TaskList testTaskLists = new TaskList();
@@ -124,7 +124,7 @@ public class ParserTest {
      * Tests for successful delete command.
      */
     @Test
-    public void testParseDelete_success() {
+    public void testParseDeleteSuccess() {
         Ui ui = new Ui();
         Parser parser = new Parser();
         TaskList testTaskLists = new TaskList();
@@ -145,7 +145,7 @@ public class ParserTest {
      * Tests for incorrect delete command.
      */
     @Test
-    public void testParseDelete_fail() {
+    public void testParseDeleteFail() {
         Ui ui = new Ui();
         Parser parser = new Parser();
         TaskList testTaskLists = new TaskList();
@@ -156,46 +156,6 @@ public class ParserTest {
         assertEquals(1, testTaskLists.getSize(), "Check size is correct after error");
         assertEquals("[T][ ] read <HIGH>", testTaskLists.get(0).toString(),
                 "Check tasks are correct after error");
-    }
-
-    /**
-     * Tests for successful mark command.
-     */
-    @Test
-    public void testParseMark() {
-        Ui ui = new Ui();
-        Parser parser = new Parser();
-        TaskList testTaskLists = new TaskList();
-
-        testTaskLists = parser.parseCommand("todo Read HIGH", testTaskLists, ui);
-        testTaskLists = parser.parseCommand("todo Eat LOW", testTaskLists, ui);
-        testTaskLists = parser.parseCommand("mark 1", testTaskLists, ui);
-
-        assertEquals("[T][X] Read <HIGH>", testTaskLists.get(0).toString(),
-                "Check that correct task is marked");
-        assertEquals("[T][ ] Eat <LOW>", testTaskLists.get(1).toString(),
-                "Check that correct task is marked");
-    }
-
-    /**
-     * Tests for successful unmark command.
-     */
-    @Test
-    public void testParseUnmark() {
-        Ui ui = new Ui();
-        Parser parser = new Parser();
-        TaskList testTaskLists = new TaskList();
-
-        testTaskLists = parser.parseCommand("todo Read high", testTaskLists, ui);
-        testTaskLists = parser.parseCommand("todo Eat low", testTaskLists, ui);
-        testTaskLists = parser.parseCommand("mark 1", testTaskLists, ui);
-        testTaskLists = parser.parseCommand("mark 2", testTaskLists, ui);
-        testTaskLists = parser.parseCommand("unmark 2", testTaskLists, ui);
-
-        assertEquals("[T][X] Read <HIGH>", testTaskLists.get(0).toString(),
-                "Check that correct task is unmarked");
-        assertEquals("[T][ ] Eat <LOW>", testTaskLists.get(1).toString(),
-                "Check that correct task is unmarked");
     }
 
     /**

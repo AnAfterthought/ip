@@ -10,10 +10,10 @@ import bpluschatter.enumerations.Priority;
 
 public class TaskListTest {
     /**
-     * Tests for successful addition of task.
+     * Tests for successful addition of tasks.
      */
     @Test
-    public void testAdd() {
+    public void testAddTask() {
         ArrayList<Task> tasksOne = new ArrayList<>();
         ArrayList<Task> tasksTwo = new ArrayList<>();
         tasksOne.add(new ToDo("Read", Priority.HIGH));
@@ -30,10 +30,10 @@ public class TaskListTest {
     }
 
     /**
-     * Tests for successful deletion of task.
+     * Tests for successful removal of task.
      */
     @Test
-    public void testDelete() {
+    public void testRemoveTask() {
         TaskList testTaskList = new TaskList();
         testTaskList = testTaskList.add(new ToDo("Read", Priority.HIGH))
                 .add(new ToDo("Eat", Priority.HIGH));
@@ -60,5 +60,20 @@ public class TaskListTest {
 
         assertEquals("[T][ ] Exercise <HIGH>", testTaskList.get(1).toString(),
                 "Check that TaskList gets correct task");
+    }
+
+    /**
+     * Tests that tasks are listed in descending order of priority.
+     */
+    @Test
+    public void testToString() {
+        TaskList testTaskList = new TaskList();
+        testTaskList = testTaskList.add(new ToDo("Read", Priority.MEDIUM))
+                .add(new ToDo("Eat", Priority.LOW))
+                .add(new ToDo("Exercise", Priority.HIGH));
+
+        assertEquals("1.[T][ ] Exercise <HIGH>\n"
+                + "2.[T][ ] Read <MEDIUM>\n"
+                + "3.[T][ ] Eat <LOW>\n", testTaskList.toString(), "Check that tasks output is correct.");
     }
 }
